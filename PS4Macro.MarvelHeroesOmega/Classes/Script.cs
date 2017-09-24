@@ -47,7 +47,7 @@ namespace PS4Macro.MarvelHeroesOmega
         public Script()
         {
             Config.Name = "Marvel Heroes Omega";
-            Config.LoopDelay = 500;
+            Config.LoopDelay = 100;
 
             ScriptForm = MainForm = new MainForm();
         }

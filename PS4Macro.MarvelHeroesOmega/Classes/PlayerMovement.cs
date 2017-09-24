@@ -230,9 +230,9 @@ namespace PS4Macro.MarvelHeroesOmega
             // Find candidate
             var candidate = sorted.First();
 
-            //// Replace candidate if we just came from there
-            //if (GetOppositeDirection(candidate.Key) == m_LastWalkDirection)
-            //    candidate = sorted.ElementAt(1);
+            // Replace candidate if we just came from there
+            if (GetOppositeDirection(candidate.Key) == m_LastWalkDirection)
+                candidate = sorted.ElementAt(1);
 
             // Returrn candidate
             m_LastWalkDirection = candidate.Key;

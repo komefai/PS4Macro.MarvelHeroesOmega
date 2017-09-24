@@ -121,6 +121,9 @@ namespace PS4Macro.MarvelHeroesOmega
                     script.Press(new DualShockState() { R1 = true });
                     TargetLocked = true;
                     LastTargetLockedTime = DateTime.Now;
+
+                    // Teleport
+                    script.Press(new DualShockState() { Circle = true });
                 }
 
                 // Attack
@@ -134,9 +137,29 @@ namespace PS4Macro.MarvelHeroesOmega
                 if (script.WalkDirection != -1)
                 {
                     var analogDirection = Helper.DegreesToAnalog(script.WalkDirection);
-                    script.Press(new DualShockState() { LX = (byte)analogDirection.X, LY = (byte)analogDirection.Y });
+                    //script.Press(new DualShockState() { LX = (byte)analogDirection.X, LY = (byte)analogDirection.Y });
 
                     //script.Press(new DualShockState() { LX = (byte)analogDirection.X, LY = (byte)analogDirection.Y }, (int)(script.WalkDistance + 1) * 100);
+
+                    var multiplier = 50;
+                    switch ((int)script.WalkDirection)
+                    {
+                        case PlayerMovement.TOP:
+                            script.Press(new DualShockState() { LY = (byte)0 }, (int)(script.WalkDistance + 1) * multiplier);
+                            break;
+
+                        case PlayerMovement.RIGHT:
+                            script.Press(new DualShockState() { LX = (byte)255 }, (int)(script.WalkDistance + 1) * multiplier);
+                            break;
+
+                        case PlayerMovement.BOTTOM:
+                            script.Press(new DualShockState() { LY = (byte)255}, (int)(script.WalkDistance + 1) * multiplier);
+                            break;
+
+                        case PlayerMovement.LEFT:
+                            script.Press(new DualShockState() { LX = (byte)0 }, (int)(script.WalkDistance + 1) * multiplier);
+                            break;
+                    }
                 }
             }
         }

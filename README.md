@@ -11,7 +11,8 @@ Bot script for MarvelHeroesOmega using [PS4 Macro](https://github.com/komefai/PS
 - Display health
 - Display spirit (blue only)
 - Auto heal at a certain %
-- Blindly attack when enemy is detected
+- Walk around map (experimental)
+- Lock target and attack when an enemy is detected
 
 ## Usage
 
@@ -21,8 +22,8 @@ Bot script for MarvelHeroesOmega using [PS4 Macro](https://github.com/komefai/PS
 
 ## To-Do List
 
-- Detect environment
-- Combat system
+- Smarter movement
+- More attack combinations
 - Collect loots
 - Selling
 

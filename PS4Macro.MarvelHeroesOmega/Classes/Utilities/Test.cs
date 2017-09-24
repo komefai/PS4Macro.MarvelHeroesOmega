@@ -56,23 +56,25 @@ namespace PS4Macro.MarvelHeroesOmega
             Bitmap newBmp = filter.Apply(bmp);
 
             newBmp.Save(PATH + @"\outtest.png");
+        }
 
-            for (var i = 0; i < 20; i++)
+        public static void TestEdge()
+        {
+            try
             {
-                Debug.WriteLine(newBmp.GetPixel(163, 2 + i));
+                Bitmap bmp = Image.FromFile(PATH + @"\test.png") as Bitmap;
+                bmp = bmp.Clone(new Rectangle(0, 0, bmp.Width, bmp.Height), PixelFormat.Format8bppIndexed);
+
+                //AForge.Imaging.Image.SetGrayscalePalette(bmp);
+                SobelEdgeDetector filter = new SobelEdgeDetector();
+                Bitmap newBmp = filter.Apply(bmp);
+
+                newBmp.Save(PATH + @"\outtest.png");
             }
-            
-
-            //try
-            //{
-            //    Bitmap testBmp = CropAtRect(newBmp, new Rectangle() { X = 163, Y = 2, Width = 1, Height = 20 });
-            //    Debug.WriteLine("IS ALL ONE COLOR: {0}", Helper.AllOneColor(testBmp));
-            //    testBmp.Save(PATH + "@\testbmp");
-            //}
-            //catch (Exception ex) { Debug.WriteLine(ex.StackTrace); }
-            
-
-
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.StackTrace);
+            }
         }
 
         public static Bitmap CropAtRect(Bitmap b, Rectangle r)

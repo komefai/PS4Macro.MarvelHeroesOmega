@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-// PS4Macro.MarvelHeroesOmega (File: Classes/ExtensionMethods.cs)
+﻿// PS4Macro.MarvelHeroesOmega (File: Classes/ExtensionMethods.cs)
 //
 // Copyright (c) 2017 Komefai
 //
@@ -25,6 +22,9 @@ using System.Drawing;
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;

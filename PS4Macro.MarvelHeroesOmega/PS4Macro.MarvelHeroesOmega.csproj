@@ -56,9 +56,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\EnemyRadar.cs" />
-    <Compile Include="Classes\ExtensionMethods.cs" />
-    <Compile Include="Classes\Helper.cs" />
+    <Compile Include="Classes\CombatSystem.cs" />
+    <Compile Include="Classes\PlayerMovement.cs" />
+    <Compile Include="Classes\Utilities\ExtensionMethods.cs" />
+    <Compile Include="Classes\Utilities\Helper.cs" />
     <Compile Include="Classes\PlayerStatus.cs" />
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
@@ -68,7 +69,7 @@
     </Compile>
     <Compile Include="Classes\Script.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Classes\Test.cs" />
+    <Compile Include="Classes\Utilities\Test.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

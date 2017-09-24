@@ -1,4 +1,4 @@
-﻿// PS4Macro.MarvelHeroesOmega (File: Classes/EnemyRadar.cs)
+﻿// PS4Macro.MarvelHeroesOmega (File: Classes/CombatSystem.cs)
 //
 // Copyright (c) 2017 Komefai
 //
@@ -22,6 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using PS4MacroAPI;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -36,10 +37,13 @@ namespace PS4Macro.MarvelHeroesOmega
         public int Health { get; set; }
     }
 
-    public class EnemyRadar
+    public class CombatSystem
     {
+        #region Statics
         public static int FilteredHealthColor = 0xE14B4B;
         public static int GreenBarColor = 0x4BE14B;
+
+        public static int GreenBarScanHeight = 19;
 
         public static Rectangle R_EnemyNameArea = new Rectangle()
         {
@@ -54,24 +58,29 @@ namespace PS4Macro.MarvelHeroesOmega
             X = 164,
             Y = 3
         };
+        #endregion
+
+        public bool TargetLocked { get; private set; }
+        public DateTime LastTargetLockedTime { get; private set; }
+        public DateTime LastFoundEnemyTime { get; private set; }
 
         public EnemyInfo DetectEnemy(Script script)
         {
             // Crop
             var bmp = script.CropFrame(R_EnemyNameArea);
             // Apply filter
-            Bitmap greenBarBmp = Helper.PosterizeFilter(bmp);
+            Bitmap filteredBmp = Helper.PosterizeFilter(bmp);
 
             Color targetGreenBarColor = GreenBarColor.ToColorOpaque();
             Color targetHealthColor = FilteredHealthColor.ToColorOpaque();
 
             bool foundGreenBar = true;
-            for (var i = 0; i < 19; i++)
+            for (var i = 0; i < GreenBarScanHeight; i++)
             {
                 //Debug.WriteLine(newBmp.GetPixel(163, 2 + i));
 
                 // Check if all is green
-                if (greenBarBmp.GetPixel(P_ColorBarStart.X, P_ColorBarStart.Y + i) != targetGreenBarColor)
+                if (filteredBmp.GetPixel(P_ColorBarStart.X, P_ColorBarStart.Y + i) != targetGreenBarColor)
                 {
                     foundGreenBar = false;
                     break;
@@ -88,6 +97,48 @@ namespace PS4Macro.MarvelHeroesOmega
             }
 
             return null;
+        }
+
+        public void Update(Script script)
+        {
+            // Use med kit
+            if (script.HealthPercent <= script.MainForm.GetUseMedKidBelowValue())
+            {
+                script.Press(new DualShockState() { L1 = true });
+            }
+
+            // Detect enemy
+            EnemyInfo enemy = DetectEnemy(script);
+
+            // Found enemy
+            if (enemy != null)
+            {
+                LastFoundEnemyTime = DateTime.Now;
+
+                // Lock target
+                if (!TargetLocked)
+                {
+                    script.Press(new DualShockState() { R1 = true });
+                    TargetLocked = true;
+                    LastTargetLockedTime = DateTime.Now;
+                }
+
+                // Attack
+                script.Press(new DualShockState() { Cross = true });
+            }
+            // Enemy not found
+            else
+            {
+                TargetLocked = false;
+
+                if (script.WalkDirection != -1)
+                {
+                    var analogDirection = Helper.DegreesToAnalog(script.WalkDirection);
+                    script.Press(new DualShockState() { LX = (byte)analogDirection.X, LY = (byte)analogDirection.Y });
+
+                    //script.Press(new DualShockState() { LX = (byte)analogDirection.X, LY = (byte)analogDirection.Y }, (int)(script.WalkDistance + 1) * 100);
+                }
+            }
         }
     }
 }

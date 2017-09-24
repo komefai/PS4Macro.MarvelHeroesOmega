@@ -61,13 +61,13 @@ namespace PS4Macro.MarvelHeroesOmega
             // Crop
             var bmp = script.CropFrame(R_HealthBar);
             // Apply filter
-            Bitmap healthBmp = Helper.PosterizeFilter(bmp);
+            Bitmap filteredBmp = Helper.PosterizeFilter(bmp);
 
             int healthPercent = -1;
             Color targetHealthColor = FilteredHealthColor.ToColorOpaque();
 
             // Health is full
-            if (healthBmp.GetPixel(P_HealthFull.X, P_HealthFull.Y) == targetHealthColor)
+            if (filteredBmp.GetPixel(P_HealthFull.X, P_HealthFull.Y) == targetHealthColor)
             {
                 healthPercent = 100;
             }
@@ -91,7 +91,7 @@ namespace PS4Macro.MarvelHeroesOmega
                     for (var j = 2; j <= 10; j++)
                     {
                         // Found red
-                        if (healthBmp.GetPixel(i, j) == targetHealthColor)
+                        if (filteredBmp.GetPixel(i, j) == targetHealthColor)
                         {
                             foundRedCount++;
                         }
@@ -145,14 +145,14 @@ namespace PS4Macro.MarvelHeroesOmega
             // Crop
             var bmp = script.CropFrame(R_SpiritBar);
             // Apply filter
-            Bitmap spiritBmp = Helper.PosterizeFilter(bmp);
+            Bitmap filteredBmp = Helper.PosterizeFilter(bmp);
 
             int spiritPercent = -1;
             Color targetSpiritColor_1 = FilteredSpiritColor_1.ToColorOpaque();
             Color targetSpiritColor_2 = FilteredSpiritColor_2.ToColorOpaque();
 
             // Spirit is full
-            var checkFullColor = spiritBmp.GetPixel(P_SpiritFull.X, P_SpiritFull.Y);
+            var checkFullColor = filteredBmp.GetPixel(P_SpiritFull.X, P_SpiritFull.Y);
             if (checkFullColor == targetSpiritColor_1 || checkFullColor == targetSpiritColor_2)
             {
                 spiritPercent = 100;
@@ -173,7 +173,7 @@ namespace PS4Macro.MarvelHeroesOmega
                     for (var j = 1; j <= 7; j++)
                     {
                         // Found blue
-                        var checkBlueColor = spiritBmp.GetPixel(i, j);
+                        var checkBlueColor = filteredBmp.GetPixel(i, j);
                         if (checkBlueColor == targetSpiritColor_1 || checkBlueColor == targetSpiritColor_2)
                         {
                             foundBlueCount++;

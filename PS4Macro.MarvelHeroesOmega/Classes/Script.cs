@@ -32,9 +32,16 @@ namespace PS4Macro.MarvelHeroesOmega
 {
     public class Script : ScriptBase
     {
-        private MainForm m_MainForm;
         private PlayerStatus m_PlayerStatus;
-        private EnemyRadar m_EnemyRadar;
+        private PlayerMovement m_PlayerMovement;
+        private CombatSystem m_CombatSystem;
+
+        public MainForm MainForm { get; private set; }
+        public int HealthPercent { get; private set; }
+        public int SpiritPercent { get; private set; }
+        public double PlayerRotation { get; private set; }
+        public double WalkDirection { get; private set; }
+        public double WalkDistance { get; private set; }
 
         /* Constructor */
         public Script()
@@ -42,7 +49,7 @@ namespace PS4Macro.MarvelHeroesOmega
             Config.Name = "Marvel Heroes Omega";
             Config.LoopDelay = 500;
 
-            ScriptForm = m_MainForm = new MainForm();
+            ScriptForm = MainForm = new MainForm();
         }
 
         // Called when the user pressed play
@@ -50,9 +57,9 @@ namespace PS4Macro.MarvelHeroesOmega
         {
             base.Start();
 
-            //Test.Start();
+            Test.TestEdge();
 
-            if (!m_MainForm.IsHandleCreated)
+            if (!MainForm.IsHandleCreated)
             {
                 System.Windows.Forms.MessageBox.Show("Press the 'Script' button and try again");
                 System.Windows.Forms.Application.Exit();
@@ -60,7 +67,8 @@ namespace PS4Macro.MarvelHeroesOmega
 
             // Initialize instances
             m_PlayerStatus = new PlayerStatus();
-            m_EnemyRadar = new EnemyRadar();
+            m_PlayerMovement = new PlayerMovement();
+            m_CombatSystem = new CombatSystem();
         }
 
         // Called every interval set by LoopDelay
@@ -70,27 +78,23 @@ namespace PS4Macro.MarvelHeroesOmega
             CaptureFrame();
 
             // Detect health
-            int healthPercent = m_PlayerStatus.DetectHealth(this);
-            m_MainForm.SetHealth(healthPercent);
-
-            // Use med kit
-            if (healthPercent <= m_MainForm.GetUseMedKidBelowValue())
-            {
-                Press(new DualShockState() { L1 = true });
-            }
+            HealthPercent = m_PlayerStatus.DetectHealth(this);
+            MainForm.SetHealth(HealthPercent);
 
             // Detect spirit
-            int spiritPercent = m_PlayerStatus.DetectSpirit(this);
-            m_MainForm.SetSpirit(spiritPercent);
+            SpiritPercent = m_PlayerStatus.DetectSpirit(this);
+            MainForm.SetSpirit(SpiritPercent);
 
-            // Detect enemy
-            EnemyInfo enemy = m_EnemyRadar.DetectEnemy(this);
+            // Detect rotation
+            PlayerRotation = m_PlayerMovement.DetectRotation(this);
 
-            // Attack
-            if (enemy != null)
-            {
-                Press(new DualShockState() { Cross = true });
-            }
+            // Walk
+            var walkInfo = m_PlayerMovement.FindWalkDirection(this);
+            WalkDirection = walkInfo.Key;
+            WalkDistance = walkInfo.Value;
+
+            // Combat system
+            m_CombatSystem.Update(this);
         }
     }
 }

@@ -41,6 +41,13 @@ namespace PS4Macro.MarvelHeroesOmega
             return filter.Apply(bmp);
         }
 
+        public static Bitmap SobelEdgeFilter(Bitmap bmp)
+        {
+            var converted = bmp.Clone(new Rectangle(0, 0, bmp.Width, bmp.Height), PixelFormat.Format8bppIndexed);
+            SobelEdgeDetector filter = new SobelEdgeDetector();
+            return filter.Apply(converted);
+        }
+
         public static bool AllOneColor(Bitmap bmp)
         {
             // Lock the bitmap's bits.  
@@ -71,6 +78,29 @@ namespace PS4Macro.MarvelHeroesOmega
             // Unlock the bits.
             bmp.UnlockBits(bmpData);
             return AllOneColor;
+        }
+
+        public static double DegreesToRadians(double angle)
+        {
+            return Math.PI * angle / 180.0;
+        }
+
+        // http://www.petercollingridge.co.uk/blog/finding-angle-around-ellipse
+        public static Point EllipseDegreesToPoint(double a, double b, double degrees, double offsetX = 0, double offsetY = 0)
+        {
+            double radians = DegreesToRadians(degrees);
+
+            // x = a.cos(θ), y = b.sin(θ)
+            int x = (int)Math.Round((Math.Cos(radians) * a) + offsetX);
+            int y = (int)Math.Round((Math.Sin(radians) * b) + offsetY);
+
+            return new Point(x, y);
+        }
+
+        public static Point DegreesToAnalog(double degrees)
+        {
+            Point p = EllipseDegreesToPoint(1, 1, degrees);
+            return new Point(p.X * 255, p.Y * 255);
         }
     }
 }

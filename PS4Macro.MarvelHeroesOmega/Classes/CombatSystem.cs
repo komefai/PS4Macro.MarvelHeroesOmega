@@ -227,6 +227,9 @@ namespace PS4Macro.MarvelHeroesOmega
             // Detect enemy
             EnemyInfo enemy = DetectEnemy(script);
 
+            // Update form
+            script.MainForm.SetEnemyInfo(enemy);
+
             // Found enemy
             if (enemy != null)
             {
@@ -242,23 +245,23 @@ namespace PS4Macro.MarvelHeroesOmega
                 // Add enemy health to history
                 EnemyHealthHistory.Add(LastEnemyHealth);
 
-                // Lock target
+                // If target is not locked
                 if (!TargetLocked)
                 {
+                    // Lock target
                     script.Press(new DualShockState() { R1 = true });
                     TargetLocked = true;
                     LastTargetLockedTime = DateTime.Now;
 
-                    // Teleport
-                    // TODO: Make button changable
-                    script.Press(new DualShockState() { Circle = true });
+                    // Dash once to get closer
+                    script.Press(script.MainForm.GetDashControl());
                 }
 
                 // Attack
-                script.Press(new DualShockState() { Cross = true });
+                script.Press(script.MainForm.GetAttackControl());
 
                 // Check enemy health for progress
-                var enemyHealthLimit = 5;
+                var enemyHealthLimit = 15;
                 if (EnemyHealthHistory.Count >= enemyHealthLimit)
                 {
                     // Search through history

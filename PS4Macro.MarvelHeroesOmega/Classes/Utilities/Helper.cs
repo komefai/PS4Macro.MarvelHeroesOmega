@@ -97,6 +97,17 @@ namespace PS4Macro.MarvelHeroesOmega
             return new Point(x, y);
         }
 
+        public static PointF DegreesToPoint(double radius, double degrees)
+        {
+            double radians = DegreesToRadians(degrees);
+
+            // x = r.cos(θ), y = r.sin(θ)
+            double x = Math.Cos(radians) * radius;
+            double y = Math.Sin(radians) * radius;
+
+            return new PointF((float)x, (float)y);
+        }
+
         public static Point DegreesToAnalog(double degrees)
         {
             Point p = EllipseDegreesToPoint(1, 1, degrees);

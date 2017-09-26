@@ -61,6 +61,13 @@
     <Compile Include="Classes\Utilities\ExtensionMethods.cs" />
     <Compile Include="Classes\Utilities\Helper.cs" />
     <Compile Include="Classes\PlayerStatus.cs" />
+    <Compile Include="Classes\Utilities\Workaround.cs" />
+    <Compile Include="Controls\AxisDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ColorProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

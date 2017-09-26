@@ -234,7 +234,7 @@ namespace PS4Macro.MarvelHeroesOmega
             if (GetOppositeDirection(candidate.Key) == m_LastWalkDirection)
                 candidate = sorted.ElementAt(1);
 
-            // Returrn candidate
+            // Return candidate
             m_LastWalkDirection = candidate.Key;
             m_LastWalkDistance = candidate.Value;
             return candidate;

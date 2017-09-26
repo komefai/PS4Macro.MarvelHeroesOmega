@@ -48,8 +48,10 @@ namespace PS4Macro.MarvelHeroesOmega
         #region Statics
         public static int FilteredHealthColor = 0xE14B4B;
         public static int GreenBarColor = 0x4BE14B;
+        public static int YellowBarColor = 0xE1E14B;
+        public static int RedBarColor = 0xE14B4B;
 
-        public static int GreenBarScanHeight = 19;
+        public static int ColorBarScanHeight = 19;
 
         // Enemy name crop rectangle
         public static Rectangle R_EnemyNameArea = new Rectangle()
@@ -99,22 +101,25 @@ namespace PS4Macro.MarvelHeroesOmega
             Bitmap filteredBmp = Helper.PosterizeFilter(bmp);
 
             Color targetGreenBarColor = GreenBarColor.ToColorOpaque();
+            Color targetYellowBarColor = YellowBarColor.ToColorOpaque();
+            Color targetRedBarColor = RedBarColor.ToColorOpaque();
             Color targetHealthColor = FilteredHealthColor.ToColorOpaque();
 
-            bool foundGreenBar = true;
-            for (var i = 0; i < GreenBarScanHeight; i++)
+            bool foundColorBar = true;
+            for (var i = 0; i < ColorBarScanHeight; i++)
             {
                 //Debug.WriteLine(newBmp.GetPixel(163, 2 + i));
 
-                // Check if all is green
-                if (filteredBmp.GetPixel(P_ColorBarStart.X, P_ColorBarStart.Y + i) != targetGreenBarColor)
+                // Check if all is the target color
+                var checkBarColor = filteredBmp.GetPixel(P_ColorBarStart.X, P_ColorBarStart.Y + i);
+                if (checkBarColor != targetGreenBarColor && checkBarColor != targetYellowBarColor && checkBarColor != targetRedBarColor)
                 {
-                    foundGreenBar = false;
+                    foundColorBar = false;
                     break;
                 }
             }
 
-            if (foundGreenBar)
+            if (foundColorBar)
             {
                 var enemyInfo = new EnemyInfo();
                 
@@ -159,6 +164,11 @@ namespace PS4Macro.MarvelHeroesOmega
                     }
                 }
 
+                // Make sure that the health is valid
+                if (enemyInfo.Health < 0)
+                    return null;
+
+                // Return enemy info
                 return enemyInfo;
             }
 

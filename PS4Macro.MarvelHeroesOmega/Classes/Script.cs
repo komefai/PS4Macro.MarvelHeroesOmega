@@ -57,7 +57,7 @@ namespace PS4Macro.MarvelHeroesOmega
         {
             base.Start();
 
-            // Test.TestEdge();
+            //Test.Start();
 
             if (!MainForm.IsHandleCreated)
             {

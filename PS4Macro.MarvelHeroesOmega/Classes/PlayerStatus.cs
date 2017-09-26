@@ -55,6 +55,9 @@ namespace PS4Macro.MarvelHeroesOmega
             Color = 0xE14B4B
         };
 
+        // Width of health bar
+        public static int HealthBarWidth = P_HealthFull.X;
+
         public int lastKnownHealth = -1;
         public int DetectHealth(Script script)
         {
@@ -74,13 +77,11 @@ namespace PS4Macro.MarvelHeroesOmega
             // Health is not full
             else
             {
-                // Width of health bar
-                var width = P_HealthFull.X;
                 // Dots needed to count
                 var dotsNeeded = 3;
 
                 // Scan health bar from right to left
-                for (var i = width - 1; i > 0; i--)
+                for (var i = HealthBarWidth - 1; i > 0; i--)
                 {
                     // Skip health icon area
                     if (i == 221 || i == 220 || i == 219)
@@ -100,7 +101,7 @@ namespace PS4Macro.MarvelHeroesOmega
                         if (foundRedCount >= dotsNeeded)
                         {
                             breakOuter = true;
-                            healthPercent = (int)((i / Convert.ToDouble(width)) * 100);
+                            healthPercent = (int)((i / Convert.ToDouble(HealthBarWidth)) * 100);
                             break;
                         }
                     }
@@ -139,6 +140,9 @@ namespace PS4Macro.MarvelHeroesOmega
             Y = 3
         };
 
+        // Width of spirit bar
+        public static int SpiritBarWidth = P_SpiritFull.X;
+
         public int lastKnownSpirit = -1;
         public int DetectSpirit(Script script)
         {
@@ -160,13 +164,11 @@ namespace PS4Macro.MarvelHeroesOmega
             // Spirit is not full
             else
             {
-                // Width of spirit bar
-                var width = P_SpiritFull.X;
                 // Dots needed to count
                 var dotsNeeded = 3;
 
                 // Scan spirit bar from right to left
-                for (var i = width - 1; i > 0; i--)
+                for (var i = SpiritBarWidth - 1; i > 0; i--)
                 {
                     int foundBlueCount = 0;
                     bool breakOuter = false;
@@ -183,7 +185,7 @@ namespace PS4Macro.MarvelHeroesOmega
                         if (foundBlueCount >= dotsNeeded)
                         {
                             breakOuter = true;
-                            spiritPercent = (int)((i / Convert.ToDouble(width)) * 100);
+                            spiritPercent = (int)((i / Convert.ToDouble(SpiritBarWidth)) * 100);
                             break;
                         }
                     }

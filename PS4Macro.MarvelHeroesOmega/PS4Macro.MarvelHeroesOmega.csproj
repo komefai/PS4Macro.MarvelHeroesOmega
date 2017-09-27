@@ -42,8 +42,9 @@
       <HintPath>..\packages\AForge.Math.2.2.5\lib\AForge.Math.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="PS4MacroAPI">
-      <HintPath>..\..\..\..\Komefai\YouTube\PS4Macro_0_3_0\PS4MacroAPI.dll</HintPath>
+    <Reference Include="PS4MacroAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\PS4Macro\PS4Macro\bin\Debug\PS4MacroAPI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

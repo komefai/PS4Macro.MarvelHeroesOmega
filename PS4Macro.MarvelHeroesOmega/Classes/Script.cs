@@ -50,6 +50,10 @@ namespace PS4Macro.MarvelHeroesOmega
             Config.LoopDelay = 100;
 
             ScriptForm = MainForm = new MainForm();
+
+
+            CurrentQueueState = new DualShockState();
+            ReleaseQueueState = new List<KeyValuePair<string[], DateTime>>();
         }
 
         // Called when the user pressed play
@@ -58,17 +62,6 @@ namespace PS4Macro.MarvelHeroesOmega
             base.Start();
 
             //Test.Start();
-
-            // Workaround
-            if (!MainForm.IsHandleCreated)
-            {
-                Workaround.PressScriptButtonOnHost();
-                if (!MainForm.IsHandleCreated)
-                {
-                    System.Windows.Forms.MessageBox.Show("Press the 'Script' button and try again");
-                    System.Windows.Forms.Application.Exit();
-                }
-            }
 
             // Initialize instances
             m_PlayerStatus = new PlayerStatus();
@@ -81,6 +74,9 @@ namespace PS4Macro.MarvelHeroesOmega
         {
             // Capture screenshot
             CaptureFrame();
+
+            // Release buttons
+            ReleaseQueue();
 
             // Detect health
             HealthPercent = m_PlayerStatus.DetectHealth(this);
@@ -106,6 +102,65 @@ namespace PS4Macro.MarvelHeroesOmega
 
             // Combat system
             m_CombatSystem.Update(this);
+        }
+
+        public override void OnStopped()
+        {
+            ReleaseQueueState.Clear();
+            ClearButtons();
+        }
+
+        public override void OnPaused()
+        {
+            ReleaseQueueState.Clear();
+            ClearButtons();
+        }
+
+        public DualShockState CurrentQueueState { get; set; }
+        public List<KeyValuePair<string[], DateTime>> ReleaseQueueState { get; set; }
+        public void PressQueue(DualShockState state, string[] properties, int delay = 150)
+        {
+            if (properties == null)
+                return;
+
+            if (!Host.IsRunning || Host.IsPaused)
+                return;
+
+            CurrentQueueState.PatchState(state);
+            ReleaseQueueState.Add(new KeyValuePair<string[], DateTime>(properties, DateTime.Now.AddMilliseconds(delay)));
+            FlushQueue();
+        }
+
+        public void PressQueue(DualShockState state, string property, int delay = 150)
+        {
+            PressQueue(state, new string[] { property }, delay);
+        }
+
+        private void ReleaseQueue()
+        {
+            DateTime now = DateTime.Now;
+            bool didChange = false;
+
+            // Check the queue for releasing buttons
+            foreach(var r in ReleaseQueueState)
+            {
+                if (now >= r.Value)
+                {
+                    CurrentQueueState.Release(r.Key);
+                    didChange = true;
+                }
+            }
+
+            // Flush queue if did change
+            if (didChange)
+            {
+                FlushQueue();
+            }
+        }
+
+        private void FlushQueue()
+        {
+            SetButtons(CurrentQueueState);
         }
     }
 }

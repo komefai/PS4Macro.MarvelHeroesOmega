@@ -100,31 +100,27 @@ namespace PS4Macro.MarvelHeroesOmega
             return (int)useMedKitNumericUpDown.Value;
         }
 
-        public DualShockState GetDashControl()
+        public ControlComboBoxItem GetDashControl()
         {
             if (dashComboBox.InvokeRequired)
             {
-                return dashComboBox.Invoke(new Func<DualShockState>(GetDashControl)) as DualShockState;
+                return dashComboBox.Invoke(new Func<ControlComboBoxItem>(GetDashControl)) as ControlComboBoxItem;
             }
             else
             {
-                var item = dashComboBox.SelectedItem as ControlComboBoxItem;
-                if (item != null) return item.State;
-                return null;
+                return dashComboBox.SelectedItem as ControlComboBoxItem;
             }
         }
 
-        public DualShockState GetAttackControl()
+        public ControlComboBoxItem GetAttackControl()
         {
             if (attackComboBox.InvokeRequired)
             {
-                return attackComboBox.Invoke(new Func<DualShockState>(GetAttackControl)) as DualShockState;
+                return attackComboBox.Invoke(new Func<ControlComboBoxItem>(GetAttackControl)) as ControlComboBoxItem;
             }
             else
             {
-                var item = attackComboBox.SelectedItem as ControlComboBoxItem;
-                if (item != null) return item.State;
-                return null;
+                return attackComboBox.SelectedItem as ControlComboBoxItem;
             }
         }
 
@@ -132,14 +128,14 @@ namespace PS4Macro.MarvelHeroesOmega
         {
             return new List<ControlComboBoxItem>()
             {
-                new ControlComboBoxItem("Triangle", new DualShockState() { Triangle = true }),
-                new ControlComboBoxItem("Circle", new DualShockState() { Circle = true }),
-                new ControlComboBoxItem("Cross", new DualShockState() { Cross = true }),
-                new ControlComboBoxItem("Square", new DualShockState() { Square = true }),
-                new ControlComboBoxItem("L2 + Triangle", new DualShockState() { L2 = 255, Triangle = true }),
-                new ControlComboBoxItem("L2 + Circle", new DualShockState() { L2 = 255, Circle = true }),
-                new ControlComboBoxItem("L2 + Cross", new DualShockState() { L2 = 255, Cross = true }),
-                new ControlComboBoxItem("L2 + Square", new DualShockState() { L2 = 255, Square = true }),
+                new ControlComboBoxItem("Triangle", new string[] { "Triangle" }, new DualShockState() { Triangle = true }),
+                new ControlComboBoxItem("Circle", new string[] { "Circle" }, new DualShockState() { Circle = true }),
+                new ControlComboBoxItem("Cross", new string[] { "Cross" }, new DualShockState() { Cross = true }),
+                new ControlComboBoxItem("Square", new string[] { "Square" }, new DualShockState() { Square = true }),
+                new ControlComboBoxItem("L2 + Triangle", new string[] { "L2", "Triangle" }, new DualShockState() { L2 = 255, Triangle = true }),
+                new ControlComboBoxItem("L2 + Circle", new string[] { "L2", "Circle" }, new DualShockState() { L2 = 255, Circle = true }),
+                new ControlComboBoxItem("L2 + Cross", new string[] { "L2", "Cross" }, new DualShockState() { L2 = 255, Cross = true }),
+                new ControlComboBoxItem("L2 + Square", new string[] { "L2", "Square" }, new DualShockState() { L2 = 255, Square = true }),
             };
         }
 
@@ -153,9 +149,6 @@ namespace PS4Macro.MarvelHeroesOmega
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            //healthProgressBar.SetState(2);
-            //spiritProgressBar.SetState(3);
-
             var controlCollection = CreateControlComboBoxCollection();
 
             BindControlComboBox(dashComboBox, controlCollection);
@@ -170,14 +163,16 @@ namespace PS4Macro.MarvelHeroesOmega
 
 
 
-    class ControlComboBoxItem
+    public class ControlComboBoxItem
     {
         public string Name { get; set; }
+        public string[] Properties { get; set; }
         public DualShockState State { get; set; }
 
-        public ControlComboBoxItem(string name, DualShockState state)
+        public ControlComboBoxItem(string name, string[] properties, DualShockState state)
         {
             Name = name;
+            Properties = properties;
             State = state;
         }
 

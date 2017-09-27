@@ -180,19 +180,19 @@ namespace PS4Macro.MarvelHeroesOmega
             switch (direction)
             {
                 case PlayerMovement.TOP:
-                    script.Press(new DualShockState() { LY = (byte)0 }, delay);
+                    script.PressQueue(new DualShockState() { LY = (byte)0 }, "LY", delay);
                     break;
 
                 case PlayerMovement.RIGHT:
-                    script.Press(new DualShockState() { LX = (byte)255 }, delay);
+                    script.PressQueue(new DualShockState() { LX = (byte)255 }, "LX", delay);
                     break;
 
                 case PlayerMovement.BOTTOM:
-                    script.Press(new DualShockState() { LY = (byte)255 }, delay);
+                    script.PressQueue(new DualShockState() { LY = (byte)255 }, "LY", delay);
                     break;
 
                 case PlayerMovement.LEFT:
-                    script.Press(new DualShockState() { LX = (byte)0 }, delay);
+                    script.PressQueue(new DualShockState() { LX = (byte)0 }, "LX", delay);
                     break;
             }
         }
@@ -200,9 +200,9 @@ namespace PS4Macro.MarvelHeroesOmega
         private void RoamMap(Script script)
         {
             var analogDirection = Helper.DegreesToAnalog(script.WalkDirection);
-            //script.Press(new DualShockState() { LX = (byte)analogDirection.X, LY = (byte)analogDirection.Y });
+            //script.PressQueue(new DualShockState() { LX = (byte)analogDirection.X, LY = (byte)analogDirection.Y });
 
-            //script.Press(new DualShockState() { LX = (byte)analogDirection.X, LY = (byte)analogDirection.Y }, (int)(script.WalkDistance + 1) * 100);
+            //script.PressQueue(new DualShockState() { LX = (byte)analogDirection.X, LY = (byte)analogDirection.Y }, (int)(script.WalkDistance + 1) * 100);
 
             var multiplier = 50;
             Walk(script, (int)script.WalkDirection, (int)(script.WalkDistance + 1) * multiplier);
@@ -221,7 +221,7 @@ namespace PS4Macro.MarvelHeroesOmega
             // Use med kit
             if (script.HealthPercent <= script.MainForm.GetUseMedKidBelowValue())
             {
-                script.Press(new DualShockState() { L1 = true });
+                script.PressQueue(new DualShockState() { L1 = true }, "L1");
             }
 
             // Detect enemy
@@ -235,6 +235,7 @@ namespace PS4Macro.MarvelHeroesOmega
             {
                 Debug.WriteLine("ENEMY HEALTH: {0}", enemy.Health);
 
+                // Store info
                 LastFoundEnemyTime = DateTime.Now;
                 LastEnemyHealth = enemy.Health;
 
@@ -245,20 +246,25 @@ namespace PS4Macro.MarvelHeroesOmega
                 // Add enemy health to history
                 EnemyHealthHistory.Add(LastEnemyHealth);
 
+                // Clear buttons
+                script.ClearButtons();
+
                 // If target is not locked
                 if (!TargetLocked)
                 {
                     // Lock target
-                    script.Press(new DualShockState() { R1 = true });
+                    script.PressQueue(new DualShockState() { R1 = true }, "R1");
                     TargetLocked = true;
                     LastTargetLockedTime = DateTime.Now;
 
                     // Dash once to get closer
-                    script.Press(script.MainForm.GetDashControl());
+                    var dashControl = script.MainForm.GetDashControl();
+                    script.PressQueue(dashControl.State, dashControl.Properties);
                 }
 
                 // Attack
-                script.Press(script.MainForm.GetAttackControl());
+                var attackControl = script.MainForm.GetAttackControl();
+                script.PressQueue(attackControl.State, attackControl.Properties);
 
                 // Check enemy health for progress
                 var enemyHealthLimit = 15;
@@ -282,7 +288,7 @@ namespace PS4Macro.MarvelHeroesOmega
                     if (shouldReset)
                     {
                         // Unlock target
-                        script.Press(new DualShockState() { R1 = true });
+                        script.PressQueue(new DualShockState() { R1 = true }, "R1");
                         TargetLocked = false;
 
                         // Reset

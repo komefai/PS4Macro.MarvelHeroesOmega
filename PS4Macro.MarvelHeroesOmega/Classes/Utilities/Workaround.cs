@@ -22,6 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using PS4MacroAPI;
 using PS4MacroAPI.Internal;
 using System;
 using System.Collections.Generic;
@@ -35,6 +36,7 @@ namespace PS4Macro.MarvelHeroesOmega
 {
     public class Workaround
     {
+        #region PressScriptButtonOnHost
         private const uint WM_LBUTTONDOWN = 0x0201;
         private const int WM_COMMAND = 0x0111;
         private const int BN_CLICKED = 0;
@@ -73,5 +75,6 @@ namespace PS4Macro.MarvelHeroesOmega
                 return true;
             }, 0);
         }
+        #endregion
     }
 }

@@ -6,18 +6,18 @@ using PS4MacroAPI;
 
 namespace PS4Macro.MarvelHeroesOmega.Scenes
 {
-    public class IntroLoading : Scene
+    public class TeleportLoading : Scene
     {
-        public override string Name => "Intro Loading";
+        public override string Name => "Teleport Loading";
 
         // Marvel logo and title
         public static RectMap R_Title = new RectMap()
         {
             X = 0,
             Y = 98,
-            Width = 867,
-            Height = 449,
-            Hash = 33114705313566
+            Width = 873,
+            Height = 487,
+            Hash = 33114705305344
         };
 
         public override bool Match(ScriptBase script)
@@ -47,7 +47,7 @@ namespace PS4Macro.MarvelHeroesOmega.Scenes
             // Wait 5 seconds
             script.Sleep(5000);
 
-            // Play Startup macro if exist
+            // Play Prepare Combat macro if exist
             ((Script)script).PlayMacroByKey(MacroManager.KEY_PREPARE_COMBAT);
         }
     }

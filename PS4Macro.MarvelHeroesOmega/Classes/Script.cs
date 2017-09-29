@@ -45,22 +45,27 @@ namespace PS4Macro.MarvelHeroesOmega
         public double WalkDirection { get; private set; }
         public double WalkDistance { get; private set; }
 
+        public bool MacroHasPriority { get; set; }
+
         /* Constructor */
         public Script()
         {
+            // General
             Config.Name = "Marvel Heroes Omega";
             Config.LoopDelay = 100;
 
+            // Setup scenes
             Config.Scenes = new List<Scene>()
             {
-                new Loading(),
+                new TeleportLoading(),
                 new IntroLoading(),
                 new Launch()
             };
 
-
+            // Setup form
             ScriptForm = MainForm = new MainForm();
 
+            // Setup custom button queue
             CurrentQueueState = new DualShockState();
             ReleaseQueueState = new List<KeyValuePair<string[], DateTime>>();
         }
@@ -84,17 +89,29 @@ namespace PS4Macro.MarvelHeroesOmega
         // Called every interval set by LoopDelay
         public override void Update()
         {
+            // Macro only
+            if (MacroHasPriority)
+                return;
+
             // Handle scenes
             Scene scene = null;
             HandleScenes(s =>
             {
                 scene = s;
-                System.Diagnostics.Debug.WriteLine(scene.Name);
+
+                // Clear all buttons
+                ClearButtonQueue();
+
+                // Set scene name in UI
+                MainForm.SetCurrentScene(scene.Name);
             });
 
             // Skip if a scene is detected
             if (scene != null)
                 return;
+
+            // Reset scene name in UI
+            MainForm.SetCurrentScene(null);
 
             // Capture screenshot
             CaptureFrame();
@@ -128,25 +145,44 @@ namespace PS4Macro.MarvelHeroesOmega
             var eternitySplinters = m_LootSystem.DetectEternitySplinters(this);
             System.Diagnostics.Debug.WriteLine("ETERNITY SPLINTER: {0} - ", eternitySplinters.Length);
 
-            //if (eternitySplinters.Length > 0)
-            //    PressQueue(new DualShockState() {Triangle = true}, "Triangle");
-
             // Combat system
             m_CombatSystem.Update(this);
         }
 
         public override void OnStopped()
         {
-            ReleaseQueueState.Clear();
-            ClearButtons();
+            ClearButtonQueue();
         }
 
         public override void OnPaused()
         {
-            ReleaseQueueState.Clear();
-            ClearButtons();
+            ClearButtonQueue();
         }
 
+        public override void OnMacroLapEnter(object sender)
+        {
+            StopMacro();
+            MacroHasPriority = false;
+        }
+
+        /* --- */
+
+        public void PlayMacroByKey(string key)
+        {
+            try
+            {
+                if (!MacroManager.Instance.Exist(key)) return;
+                PlayMacro(MacroManager.Instance.PathDictionary[key]);
+                MacroHasPriority = true;
+            }
+            catch (Exception)
+            {
+                StopMacro();
+                MacroHasPriority = false;
+            }
+        }
+
+        #region Button Queue
         public DualShockState CurrentQueueState { get; set; }
         public List<KeyValuePair<string[], DateTime>> ReleaseQueueState { get; set; }
         public void PressQueue(DualShockState state, string[] properties, int delay = 150)
@@ -193,5 +229,12 @@ namespace PS4Macro.MarvelHeroesOmega
         {
             SetButtons(CurrentQueueState);
         }
+
+        private void ClearButtonQueue()
+        {
+            ReleaseQueueState.Clear();
+            ClearButtons();
+        }
+        #endregion
     }
 }

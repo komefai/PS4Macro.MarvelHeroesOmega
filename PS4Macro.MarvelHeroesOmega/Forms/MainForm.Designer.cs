@@ -39,17 +39,24 @@
             this.dashComboBox = new System.Windows.Forms.ComboBox();
             this.dashLabel = new System.Windows.Forms.Label();
             this.debugGroupBox = new System.Windows.Forms.GroupBox();
+            this.lootDebugButton = new System.Windows.Forms.Button();
             this.enemyInfoSplitterLabel = new System.Windows.Forms.Label();
             this.enemyHealthLabel = new System.Windows.Forms.Label();
             this.enemyLabel = new System.Windows.Forms.Label();
+            this.macrosGroupBox = new System.Windows.Forms.GroupBox();
+            this.startupMacroButton = new System.Windows.Forms.Button();
+            this.startupMacroLabel = new System.Windows.Forms.Label();
+            this.prepareCombatMacroLabel = new System.Windows.Forms.Label();
+            this.prepareCombatMacroButton = new System.Windows.Forms.Button();
+            this.currentSceneLabel = new System.Windows.Forms.Label();
             this.playerAxisDisplay = new PS4Macro.MarvelHeroesOmega.AxisDisplay();
             this.enemyHealthProgressBar = new PS4Macro.MarvelHeroesOmega.ColorProgressBar();
             this.healthProgressBar = new PS4Macro.MarvelHeroesOmega.ColorProgressBar();
             this.spiritProgressBar = new PS4Macro.MarvelHeroesOmega.ColorProgressBar();
-            this.lootDebugButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.useMedKitNumericUpDown)).BeginInit();
             this.settingsGroupBox.SuspendLayout();
             this.debugGroupBox.SuspendLayout();
+            this.macrosGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // healthLabel
@@ -144,18 +151,29 @@
             // 
             // debugGroupBox
             // 
+            this.debugGroupBox.Controls.Add(this.currentSceneLabel);
             this.debugGroupBox.Controls.Add(this.lootDebugButton);
             this.debugGroupBox.Controls.Add(this.playerAxisDisplay);
             this.debugGroupBox.Controls.Add(this.enemyInfoSplitterLabel);
             this.debugGroupBox.Controls.Add(this.enemyHealthLabel);
             this.debugGroupBox.Controls.Add(this.enemyLabel);
             this.debugGroupBox.Controls.Add(this.enemyHealthProgressBar);
-            this.debugGroupBox.Location = new System.Drawing.Point(12, 196);
+            this.debugGroupBox.Location = new System.Drawing.Point(12, 290);
             this.debugGroupBox.Name = "debugGroupBox";
             this.debugGroupBox.Size = new System.Drawing.Size(349, 87);
             this.debugGroupBox.TabIndex = 7;
             this.debugGroupBox.TabStop = false;
             this.debugGroupBox.Text = "Debug";
+            // 
+            // lootDebugButton
+            // 
+            this.lootDebugButton.Location = new System.Drawing.Point(143, 16);
+            this.lootDebugButton.Name = "lootDebugButton";
+            this.lootDebugButton.Size = new System.Drawing.Size(75, 23);
+            this.lootDebugButton.TabIndex = 5;
+            this.lootDebugButton.Text = "Loot Debug";
+            this.lootDebugButton.UseVisualStyleBackColor = true;
+            this.lootDebugButton.Click += new System.EventHandler(this.lootDebugButton_Click);
             // 
             // enemyInfoSplitterLabel
             // 
@@ -182,6 +200,68 @@
             this.enemyLabel.Size = new System.Drawing.Size(45, 13);
             this.enemyLabel.TabIndex = 1;
             this.enemyLabel.Text = "ENEMY";
+            // 
+            // macrosGroupBox
+            // 
+            this.macrosGroupBox.Controls.Add(this.prepareCombatMacroButton);
+            this.macrosGroupBox.Controls.Add(this.prepareCombatMacroLabel);
+            this.macrosGroupBox.Controls.Add(this.startupMacroButton);
+            this.macrosGroupBox.Controls.Add(this.startupMacroLabel);
+            this.macrosGroupBox.Location = new System.Drawing.Point(12, 196);
+            this.macrosGroupBox.Name = "macrosGroupBox";
+            this.macrosGroupBox.Size = new System.Drawing.Size(349, 88);
+            this.macrosGroupBox.TabIndex = 8;
+            this.macrosGroupBox.TabStop = false;
+            this.macrosGroupBox.Text = "Macros";
+            // 
+            // startupMacroButton
+            // 
+            this.startupMacroButton.Location = new System.Drawing.Point(53, 20);
+            this.startupMacroButton.Name = "startupMacroButton";
+            this.startupMacroButton.Size = new System.Drawing.Size(63, 23);
+            this.startupMacroButton.TabIndex = 1;
+            this.startupMacroButton.Tag = "Startup";
+            this.startupMacroButton.Text = "NOT SET";
+            this.startupMacroButton.UseVisualStyleBackColor = true;
+            this.startupMacroButton.Click += new System.EventHandler(this.macroButton_Click);
+            // 
+            // startupMacroLabel
+            // 
+            this.startupMacroLabel.AutoSize = true;
+            this.startupMacroLabel.Location = new System.Drawing.Point(6, 25);
+            this.startupMacroLabel.Name = "startupMacroLabel";
+            this.startupMacroLabel.Size = new System.Drawing.Size(41, 13);
+            this.startupMacroLabel.TabIndex = 0;
+            this.startupMacroLabel.Text = "Startup";
+            // 
+            // prepareCombatMacroLabel
+            // 
+            this.prepareCombatMacroLabel.AutoSize = true;
+            this.prepareCombatMacroLabel.Location = new System.Drawing.Point(6, 56);
+            this.prepareCombatMacroLabel.Name = "prepareCombatMacroLabel";
+            this.prepareCombatMacroLabel.Size = new System.Drawing.Size(83, 13);
+            this.prepareCombatMacroLabel.TabIndex = 2;
+            this.prepareCombatMacroLabel.Text = "Prepare Combat";
+            // 
+            // prepareCombatMacroButton
+            // 
+            this.prepareCombatMacroButton.Location = new System.Drawing.Point(95, 51);
+            this.prepareCombatMacroButton.Name = "prepareCombatMacroButton";
+            this.prepareCombatMacroButton.Size = new System.Drawing.Size(63, 23);
+            this.prepareCombatMacroButton.TabIndex = 3;
+            this.prepareCombatMacroButton.Tag = "PrepareCombat";
+            this.prepareCombatMacroButton.Text = "NOT SET";
+            this.prepareCombatMacroButton.UseVisualStyleBackColor = true;
+            this.prepareCombatMacroButton.Click += new System.EventHandler(this.macroButton_Click);
+            // 
+            // currentSceneLabel
+            // 
+            this.currentSceneLabel.AutoSize = true;
+            this.currentSceneLabel.Location = new System.Drawing.Point(59, 58);
+            this.currentSceneLabel.Name = "currentSceneLabel";
+            this.currentSceneLabel.Size = new System.Drawing.Size(47, 13);
+            this.currentSceneLabel.TabIndex = 6;
+            this.currentSceneLabel.Text = "Scene: -";
             // 
             // playerAxisDisplay
             // 
@@ -218,21 +298,12 @@
             this.spiritProgressBar.Size = new System.Drawing.Size(270, 23);
             this.spiritProgressBar.TabIndex = 5;
             // 
-            // lootDebugButton
-            // 
-            this.lootDebugButton.Location = new System.Drawing.Point(79, 16);
-            this.lootDebugButton.Name = "lootDebugButton";
-            this.lootDebugButton.Size = new System.Drawing.Size(75, 23);
-            this.lootDebugButton.TabIndex = 5;
-            this.lootDebugButton.Text = "Loot Debug";
-            this.lootDebugButton.UseVisualStyleBackColor = true;
-            this.lootDebugButton.Click += new System.EventHandler(this.lootDebugButton_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(373, 295);
+            this.ClientSize = new System.Drawing.Size(373, 389);
+            this.Controls.Add(this.macrosGroupBox);
             this.Controls.Add(this.debugGroupBox);
             this.Controls.Add(this.settingsGroupBox);
             this.Controls.Add(this.healthProgressBar);
@@ -249,6 +320,8 @@
             this.settingsGroupBox.PerformLayout();
             this.debugGroupBox.ResumeLayout(false);
             this.debugGroupBox.PerformLayout();
+            this.macrosGroupBox.ResumeLayout(false);
+            this.macrosGroupBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -274,5 +347,11 @@
         private System.Windows.Forms.ComboBox dashComboBox;
         private System.Windows.Forms.Label dashLabel;
         private System.Windows.Forms.Button lootDebugButton;
+        private System.Windows.Forms.GroupBox macrosGroupBox;
+        private System.Windows.Forms.Button startupMacroButton;
+        private System.Windows.Forms.Label startupMacroLabel;
+        private System.Windows.Forms.Button prepareCombatMacroButton;
+        private System.Windows.Forms.Label prepareCombatMacroLabel;
+        private System.Windows.Forms.Label currentSceneLabel;
     }
 }

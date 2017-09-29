@@ -1,4 +1,28 @@
-﻿using System;
+﻿// PS4Macro.MarvelHeroesOmega (File: Forms/DebugLootForm.cs)
+//
+// Copyright (c) 2017 Komefai
+//
+// Visit http://komefai.com for more information
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,8 +36,6 @@ using AForge;
 using AForge.Imaging;
 using AForge.Math.Geometry;
 using PS4MacroAPI.Internal;
-using Image = System.Drawing.Image;
-using Point = System.Drawing.Point;
 
 namespace PS4Macro.MarvelHeroesOmega
 {
@@ -21,7 +43,7 @@ namespace PS4Macro.MarvelHeroesOmega
     {
         protected bool validData;
         string path;
-        protected Image image;
+        protected System.Drawing.Image image;
         protected Thread getImageThread;
 
         public DebugLootForm()
@@ -112,7 +134,7 @@ namespace PS4Macro.MarvelHeroesOmega
             imageBPictureBox.Image = newBmp;
         }
 
-        private void OnImageChanged(Image image, PictureBox pictureBox)
+        private void OnImageChanged(System.Drawing.Image image, PictureBox pictureBox)
         {
 
         }
@@ -133,7 +155,7 @@ namespace PS4Macro.MarvelHeroesOmega
                 {
                     using (FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read))
                     {
-                        image = Image.FromStream(stream);
+                        image = System.Drawing.Image.FromStream(stream);
                     }
                 }));
 
@@ -156,7 +178,7 @@ namespace PS4Macro.MarvelHeroesOmega
 
                 PictureBox pb = null;
 
-                if (this.PointToClient(new Point(e.X, e.Y)).X <= Size.Width / 2)
+                if (this.PointToClient(new System.Drawing.Point(e.X, e.Y)).X <= Size.Width / 2)
                     pb = imageAPictureBox;
                 else
                     pb = imageBPictureBox;

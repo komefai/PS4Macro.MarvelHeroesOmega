@@ -29,6 +29,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 
@@ -71,6 +72,15 @@ namespace PS4Macro.MarvelHeroesOmega
             {
                 playerAxisDisplay.Value = point;
                 playerAxisDisplay.Invalidate();
+            }));
+        }
+
+        public void SetCurrentScene(string name)
+        {
+            BeginInvoke(new Action(() =>
+            {
+                string text = name ?? "-";
+                currentSceneLabel.Text = $"Scene: {text}";
             }));
         }
 
@@ -151,17 +161,47 @@ namespace PS4Macro.MarvelHeroesOmega
         {
             var controlCollection = CreateControlComboBoxCollection();
 
+            // Dash comboBox
             BindControlComboBox(dashComboBox, controlCollection);
             dashComboBox.SelectedIndex = 1;
 
+            // Attack comboBox
             BindControlComboBox(attackComboBox, controlCollection);
             attackComboBox.SelectedIndex = 2;
+
+            // Startup macro
+            startupMacroButton.Tag = MacroManager.KEY_STARTUP;
+            // Prepare Combat macro
+            prepareCombatMacroButton.Tag = MacroManager.KEY_PREPARE_COMBAT;
         }
 
+        #region Macros
+        private void macroButton_Click(object sender, EventArgs e)
+        {
+            var button = sender as Button;
+            var tag = button.Tag.ToString();
+
+            var openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = Assembly.GetEntryAssembly().Location;
+            openFileDialog.Filter = "XML Files (*.xml)|*.xml|All files (*.*)|*.*"; ;
+            openFileDialog.FilterIndex = 0;
+            openFileDialog.RestoreDirectory = true;
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                // Load
+                MacroManager.Instance.PathDictionary[tag] = openFileDialog.FileName;
+                button.Text = "OK";
+            }
+        }
+        #endregion
+
+        #region Debug
         private void lootDebugButton_Click(object sender, EventArgs e)
         {
             new DebugLootForm().Show(this);
         }
+        #endregion
     }
 
 

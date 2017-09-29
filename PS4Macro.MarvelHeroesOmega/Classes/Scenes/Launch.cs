@@ -37,8 +37,8 @@ namespace PS4Macro.MarvelHeroesOmega.Scenes
         {
             // Press play
             script.Press(new DualShockState() { Cross = true });
-            // Wait 15 seconds
-            script.Sleep(15000);
+            // Wait 10 seconds
+            script.Sleep(10000);
         }
     }
 }

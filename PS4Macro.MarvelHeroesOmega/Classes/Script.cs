@@ -27,6 +27,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using PS4Macro.MarvelHeroesOmega.Scenes;
 
 namespace PS4Macro.MarvelHeroesOmega
 {
@@ -50,8 +51,15 @@ namespace PS4Macro.MarvelHeroesOmega
             Config.Name = "Marvel Heroes Omega";
             Config.LoopDelay = 100;
 
-            ScriptForm = MainForm = new MainForm();
+            Config.Scenes = new List<Scene>()
+            {
+                new Loading(),
+                new IntroLoading(),
+                new Launch()
+            };
 
+
+            ScriptForm = MainForm = new MainForm();
 
             CurrentQueueState = new DualShockState();
             ReleaseQueueState = new List<KeyValuePair<string[], DateTime>>();
@@ -76,6 +84,18 @@ namespace PS4Macro.MarvelHeroesOmega
         // Called every interval set by LoopDelay
         public override void Update()
         {
+            // Handle scenes
+            Scene scene = null;
+            HandleScenes(s =>
+            {
+                scene = s;
+                System.Diagnostics.Debug.WriteLine(scene.Name);
+            });
+
+            // Skip if a scene is detected
+            if (scene != null)
+                return;
+
             // Capture screenshot
             CaptureFrame();
 

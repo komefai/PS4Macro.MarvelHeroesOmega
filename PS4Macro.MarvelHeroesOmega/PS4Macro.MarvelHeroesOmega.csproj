@@ -60,6 +60,9 @@
     <Compile Include="Classes\CombatSystem.cs" />
     <Compile Include="Classes\LootSystem.cs" />
     <Compile Include="Classes\PlayerMovement.cs" />
+    <Compile Include="Classes\Scenes\Launch.cs" />
+    <Compile Include="Classes\Scenes\IntroLoading.cs" />
+    <Compile Include="Classes\Scenes\Loading.cs" />
     <Compile Include="Classes\Utilities\ExtensionMethods.cs" />
     <Compile Include="Classes\Utilities\Helper.cs" />
     <Compile Include="Classes\PlayerStatus.cs" />

@@ -116,7 +116,7 @@ namespace PS4Macro.MarvelHeroesOmega
                 // Color is matched
                 if (checkColor && checkNextColor)
                 {
-                    Debug.WriteLine("DEGREES ({0}, {1}): {2}", p.X, p.Y, degrees);
+                    //Debug.WriteLine("DEGREES ({0}, {1}): {2}", p.X, p.Y, degrees);
                     return degrees;
                 }
             }
@@ -225,7 +225,7 @@ namespace PS4Macro.MarvelHeroesOmega
 
             // Sort by longest distance
             var sorted = from pair in distances orderby pair.Value descending select pair;
-            Debug.WriteLine("DIRECTION {0}", sorted.First());
+            //Debug.WriteLine("DIRECTION {0}", sorted.First());
 
             // Find candidate
             var candidate = sorted.First();

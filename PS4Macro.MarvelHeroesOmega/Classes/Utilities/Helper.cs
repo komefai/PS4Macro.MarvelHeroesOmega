@@ -80,6 +80,11 @@ namespace PS4Macro.MarvelHeroesOmega
             return AllOneColor;
         }
 
+        public static PointF[] AForgeToPointsArray(List<AForge.IntPoint> points)
+        {
+            return points.Select(p => new System.Drawing.PointF(p.X, p.Y)).ToArray();
+        }
+
         public static double DegreesToRadians(double angle)
         {
             return Math.PI * angle / 180.0;

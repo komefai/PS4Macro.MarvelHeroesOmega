@@ -35,6 +35,7 @@ namespace PS4Macro.MarvelHeroesOmega
         private PlayerStatus m_PlayerStatus;
         private PlayerMovement m_PlayerMovement;
         private CombatSystem m_CombatSystem;
+        private LootSystem m_LootSystem;
 
         public MainForm MainForm { get; private set; }
         public int HealthPercent { get; private set; }
@@ -63,10 +64,13 @@ namespace PS4Macro.MarvelHeroesOmega
 
             //Test.Start();
 
+            //Test.EternitySplinterDetect();
+
             // Initialize instances
             m_PlayerStatus = new PlayerStatus();
             m_PlayerMovement = new PlayerMovement();
             m_CombatSystem = new CombatSystem();
+            m_LootSystem = new LootSystem();
         }
 
         // Called every interval set by LoopDelay
@@ -89,7 +93,7 @@ namespace PS4Macro.MarvelHeroesOmega
             // Detect rotation
             PlayerRotation = m_PlayerMovement.DetectRotation(this);
 
-            // Walk
+            // Walk direction
             var walkInfo = m_PlayerMovement.FindWalkDirection(this);
             WalkDirection = walkInfo.Key;
             WalkDistance = walkInfo.Value;
@@ -99,6 +103,13 @@ namespace PS4Macro.MarvelHeroesOmega
             var playerAxis = Helper.DegreesToPoint(1.0f, WalkDirection - 90);
             playerAxis.Y *= -1;
             MainForm.SetPlayerAxis(playerAxis);
+
+            // Detect loots
+            var eternitySplinters = m_LootSystem.DetectEternitySplinters(this);
+            System.Diagnostics.Debug.WriteLine("ETERNITY SPLINTER: {0} - ", eternitySplinters.Length);
+
+            //if (eternitySplinters.Length > 0)
+            //    PressQueue(new DualShockState() {Triangle = true}, "Triangle");
 
             // Combat system
             m_CombatSystem.Update(this);

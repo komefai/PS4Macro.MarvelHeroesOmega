@@ -157,6 +157,11 @@ namespace PS4Macro.MarvelHeroesOmega
             BindControlComboBox(attackComboBox, controlCollection);
             attackComboBox.SelectedIndex = 2;
         }
+
+        private void lootDebugButton_Click(object sender, EventArgs e)
+        {
+            new DebugLootForm().Show(this);
+        }
     }
 
 

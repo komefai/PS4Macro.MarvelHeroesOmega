@@ -46,6 +46,7 @@
             this.enemyHealthProgressBar = new PS4Macro.MarvelHeroesOmega.ColorProgressBar();
             this.healthProgressBar = new PS4Macro.MarvelHeroesOmega.ColorProgressBar();
             this.spiritProgressBar = new PS4Macro.MarvelHeroesOmega.ColorProgressBar();
+            this.lootDebugButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.useMedKitNumericUpDown)).BeginInit();
             this.settingsGroupBox.SuspendLayout();
             this.debugGroupBox.SuspendLayout();
@@ -143,6 +144,7 @@
             // 
             // debugGroupBox
             // 
+            this.debugGroupBox.Controls.Add(this.lootDebugButton);
             this.debugGroupBox.Controls.Add(this.playerAxisDisplay);
             this.debugGroupBox.Controls.Add(this.enemyInfoSplitterLabel);
             this.debugGroupBox.Controls.Add(this.enemyHealthLabel);
@@ -216,6 +218,16 @@
             this.spiritProgressBar.Size = new System.Drawing.Size(270, 23);
             this.spiritProgressBar.TabIndex = 5;
             // 
+            // lootDebugButton
+            // 
+            this.lootDebugButton.Location = new System.Drawing.Point(79, 16);
+            this.lootDebugButton.Name = "lootDebugButton";
+            this.lootDebugButton.Size = new System.Drawing.Size(75, 23);
+            this.lootDebugButton.TabIndex = 5;
+            this.lootDebugButton.Text = "Loot Debug";
+            this.lootDebugButton.UseVisualStyleBackColor = true;
+            this.lootDebugButton.Click += new System.EventHandler(this.lootDebugButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -261,5 +273,6 @@
         private System.Windows.Forms.Label attackLabel;
         private System.Windows.Forms.ComboBox dashComboBox;
         private System.Windows.Forms.Label dashLabel;
+        private System.Windows.Forms.Button lootDebugButton;
     }
 }

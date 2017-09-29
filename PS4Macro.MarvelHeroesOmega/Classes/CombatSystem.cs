@@ -233,7 +233,7 @@ namespace PS4Macro.MarvelHeroesOmega
             // Found enemy
             if (enemy != null)
             {
-                Debug.WriteLine("ENEMY HEALTH: {0}", enemy.Health);
+                //Debug.WriteLine("ENEMY HEALTH: {0}", enemy.Health);
 
                 // Store info
                 LastFoundEnemyTime = DateTime.Now;

@@ -31,6 +31,10 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
+using AForge;
+using AForge.Imaging;
+using AForge.Math.Geometry;
+using Image = System.Drawing.Image;
 
 namespace PS4Macro.MarvelHeroesOmega
 {
@@ -75,6 +79,138 @@ namespace PS4Macro.MarvelHeroesOmega
             {
                 Debug.WriteLine(ex.StackTrace);
             }
+        }
+
+        public static void ColorFilter()
+        {
+            try
+            {
+                Bitmap bmp = Image.FromFile(PATH + @"\test.png") as Bitmap;
+                ColorFiltering filter = new ColorFiltering();
+                filter.Red = new IntRange(100, 255);
+                filter.Green = new IntRange(0, 75);
+                filter.Green = new IntRange(0, 75);
+
+                Bitmap newBmp = filter.Apply(bmp);
+
+                newBmp.Save(PATH + @"\outtest.png");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.StackTrace);
+            }
+        }
+
+        public static void EternitySplinterFilter()
+        {
+            try
+            {
+                Bitmap bmp = Image.FromFile(PATH + @"\test.png") as Bitmap;
+                Bitmap newBmp = LootSystem.EternitySplinterFilter(bmp);
+
+                newBmp.Save(PATH + @"\outtest.png");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.StackTrace);
+            }
+
+        }
+
+        public static void EternitySplinterDraw()
+        {
+            try
+            {
+                Bitmap bmp = Image.FromFile(PATH + @"\test.png") as Bitmap;
+                Bitmap newBmp = LootSystem.EternitySplinterFilter(bmp);
+
+                // locate objects using blob counter
+                BlobCounter blobCounter = new BlobCounter()
+                {
+                    FilterBlobs = true,
+                    MinWidth = 15,
+                    MinHeight = 15,
+                    MaxWidth = 28,
+                    MaxHeight = 28
+                };
+
+                // Process input image
+                blobCounter.ProcessImage(newBmp);
+                // Get information about detected objects
+                Blob[] blobs = blobCounter.GetObjectsInformation();
+
+                // create Graphics object to draw on the image and a pen
+                Graphics g = Graphics.FromImage(newBmp);
+                Pen bluePen = new Pen(Color.Blue, 2);
+                // check each object and draw circle around objects, which
+                // are recognized as circles
+                for (int i = 0, n = blobs.Length; i < n; i++)
+                {
+                    List<IntPoint> edgePoints = blobCounter.GetBlobsEdgePoints(blobs[i]);
+                    List<IntPoint> corners = PointsCloud.FindQuadrilateralCorners(edgePoints);
+
+                    g.DrawPolygon(bluePen, Helper.AForgeToPointsArray(corners));
+                }
+
+                bluePen.Dispose();
+                g.Dispose();
+
+                
+                newBmp.Save(PATH + @"\outtest.png");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.StackTrace);
+            }
+
+        }
+
+        public static void EternitySplinterDetect()
+        {
+            try
+            {
+                Bitmap bmp = Image.FromFile(PATH + @"\test.png") as Bitmap;
+                Bitmap newBmp = LootSystem.EternitySplinterFilter(bmp);
+
+                // locate objects using blob counter
+                BlobCounter blobCounter = new BlobCounter()
+                {
+                    FilterBlobs = true,
+                    MinWidth = 2,
+                    MinHeight = 2,
+                    MaxWidth = 28,
+                    MaxHeight = 28
+                };
+
+                // Process input image
+                blobCounter.ProcessImage(newBmp);
+                // Get information about detected objects
+                Blob[] blobs = blobCounter.GetObjectsInformation();
+
+                // create Graphics object to draw on the image and a pen
+                Graphics g = Graphics.FromImage(newBmp);
+                Pen bluePen = new Pen(Color.Blue, 2);
+                // check each object and draw circle around objects, which
+                // are recognized as circles
+                for (int i = 0, n = blobs.Length; i < n; i++)
+                {
+                    List<IntPoint> edgePoints = blobCounter.GetBlobsEdgePoints(blobs[i]);
+                    List<IntPoint> corners = PointsCloud.FindQuadrilateralCorners(edgePoints);
+
+                    g.DrawPolygon(bluePen, Helper.AForgeToPointsArray(corners));
+                }
+
+                bluePen.Dispose();
+                g.Dispose();
+
+
+                newBmp.Save(PATH + @"\outtest.png");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.StackTrace);
+            }
+
         }
 
         public static Bitmap CropAtRect(Bitmap b, Rectangle r)

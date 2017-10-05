@@ -122,30 +122,32 @@ namespace PS4Macro.MarvelHeroesOmega
             }
         }
 
-        public ControlComboBoxItem GetAttackControl()
+        public void SetCurrentObjectiveIndex(int index)
         {
-            if (attackComboBox.InvokeRequired)
+            BeginInvoke(new Action(() =>
             {
-                return attackComboBox.Invoke(new Func<ControlComboBoxItem>(GetAttackControl)) as ControlComboBoxItem;
-            }
-            else
-            {
-                return attackComboBox.SelectedItem as ControlComboBoxItem;
-            }
+                try
+                {
+                    objectivesDataGridView.ClearSelection();
+                    objectivesDataGridView.CurrentCell = objectivesDataGridView.Rows[index].Cells[0];
+                    objectivesDataGridView.Rows[index].Selected = true;
+                }
+                catch (Exception) { }
+            }));
         }
 
         private List<ControlComboBoxItem> CreateControlComboBoxCollection()
         {
             return new List<ControlComboBoxItem>()
             {
-                new ControlComboBoxItem("Triangle", new string[] { "Triangle" }, new DualShockState() { Triangle = true }),
-                new ControlComboBoxItem("Circle", new string[] { "Circle" }, new DualShockState() { Circle = true }),
-                new ControlComboBoxItem("Cross", new string[] { "Cross" }, new DualShockState() { Cross = true }),
-                new ControlComboBoxItem("Square", new string[] { "Square" }, new DualShockState() { Square = true }),
-                new ControlComboBoxItem("L2 + Triangle", new string[] { "L2", "Triangle" }, new DualShockState() { L2 = 255, Triangle = true }),
-                new ControlComboBoxItem("L2 + Circle", new string[] { "L2", "Circle" }, new DualShockState() { L2 = 255, Circle = true }),
-                new ControlComboBoxItem("L2 + Cross", new string[] { "L2", "Cross" }, new DualShockState() { L2 = 255, Cross = true }),
-                new ControlComboBoxItem("L2 + Square", new string[] { "L2", "Square" }, new DualShockState() { L2 = 255, Square = true }),
+                new ControlComboBoxItem("Triangle", new [] { "Triangle" }, new DualShockState() { Triangle = true }),
+                new ControlComboBoxItem("Circle", new [] { "Circle" }, new DualShockState() { Circle = true }),
+                new ControlComboBoxItem("Cross", new [] { "Cross" }, new DualShockState() { Cross = true }),
+                new ControlComboBoxItem("Square", new [] { "Square" }, new DualShockState() { Square = true }),
+                new ControlComboBoxItem("L2 + Triangle", new [] { "L2", "Triangle" }, new DualShockState() { L2 = 255, Triangle = true }),
+                new ControlComboBoxItem("L2 + Circle", new [] { "L2", "Circle" }, new DualShockState() { L2 = 255, Circle = true }),
+                new ControlComboBoxItem("L2 + Cross", new [] { "L2", "Cross" }, new DualShockState() { L2 = 255, Cross = true }),
+                new ControlComboBoxItem("L2 + Square", new [] { "L2", "Square" }, new DualShockState() { L2 = 255, Square = true }),
             };
         }
 
@@ -157,6 +159,33 @@ namespace PS4Macro.MarvelHeroesOmega
             comboBox.DisplayMember = "Name";
         }
 
+        private void BindMacrosDataGrid()
+        {
+            if (Settings.Instance.Data.ObjectiveList == null) return;
+
+            var bindingList = new BindingList<ObjectiveItem>(Settings.Instance.Data.ObjectiveList);
+            objectivesDataGridView.DataSource = bindingList;
+        }
+
+        private void SaveSettings()
+        {
+            Settings.Instance.Save(Helper.GetScriptFolder() + @"\profile.xml");
+        }
+
+        private void LoadSettings()
+        {
+            Settings.Instance.Load(Helper.GetScriptFolder() + @"\profile.xml");
+
+            // Med kit
+            useMedKitNumericUpDown.Value = Settings.Instance.Data.HealPercent;
+
+            // Dash comboBox
+            dashComboBox.SelectedIndex = Settings.Instance.Data.DashControlIndex;
+
+            // BindMacrosDataGrid
+            BindMacrosDataGrid();
+        }
+
         private void MainForm_Load(object sender, EventArgs e)
         {
             var controlCollection = CreateControlComboBoxCollection();
@@ -165,33 +194,58 @@ namespace PS4Macro.MarvelHeroesOmega
             BindControlComboBox(dashComboBox, controlCollection);
             dashComboBox.SelectedIndex = 1;
 
-            // Attack comboBox
-            BindControlComboBox(attackComboBox, controlCollection);
-            attackComboBox.SelectedIndex = 2;
+            // BindMacrosDataGrid
+            BindMacrosDataGrid();
 
-            // Startup macro
-            startupMacroButton.Tag = MacroManager.KEY_STARTUP;
-            // Prepare Combat macro
-            prepareCombatMacroButton.Tag = MacroManager.KEY_PREPARE_COMBAT;
+            // Load or use default settings
+            try
+            {
+                LoadSettings();
+            }
+            catch { Settings.Instance.InitData(); }
         }
 
-        #region Macros
-        private void macroButton_Click(object sender, EventArgs e)
+        #region Settings
+        private void saveButton_Click(object sender, EventArgs e)
         {
-            var button = sender as Button;
-            var tag = button.Tag.ToString();
+            SaveSettings();
+        }
 
-            var openFileDialog = new OpenFileDialog();
-            openFileDialog.InitialDirectory = Assembly.GetEntryAssembly().Location;
-            openFileDialog.Filter = "XML Files (*.xml)|*.xml|All files (*.*)|*.*"; ;
-            openFileDialog.FilterIndex = 0;
-            openFileDialog.RestoreDirectory = true;
+        private void loadButton_Click(object sender, EventArgs e)
+        {
+            LoadSettings();
+        }
 
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+        private void useMedKitNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            Settings.Instance.Data.HealPercent = (int)useMedKitNumericUpDown.Value;
+        }
+
+        private void dashComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Settings.Instance.Data.DashControlIndex = dashComboBox.SelectedIndex;
+        }
+
+        private void attackSequenceButton_Click(object sender, EventArgs e)
+        {
+            new AttackSequenceForm().ShowDialog(this);
+        }
+        #endregion
+
+        #region Objectives
+        private void objectivesDataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            var dataGridView = sender as DataGridView;
+
+            if (dataGridView == null)
+                return;
+
+            if (e.RowIndex < 0 || e.RowIndex == dataGridView.NewRowIndex)
+                return;
+
+            if (e.ColumnIndex == dataGridView.Columns["Index"].Index)
             {
-                // Load
-                MacroManager.Instance.PathDictionary[tag] = openFileDialog.FileName;
-                button.Text = "OK";
+                e.Value = e.RowIndex + 1;
             }
         }
         #endregion

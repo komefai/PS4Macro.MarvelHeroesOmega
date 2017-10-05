@@ -34,29 +34,33 @@
             this.useMedKitNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.spiritLabel = new System.Windows.Forms.Label();
             this.settingsGroupBox = new System.Windows.Forms.GroupBox();
-            this.attackComboBox = new System.Windows.Forms.ComboBox();
-            this.attackLabel = new System.Windows.Forms.Label();
             this.dashComboBox = new System.Windows.Forms.ComboBox();
             this.dashLabel = new System.Windows.Forms.Label();
             this.debugGroupBox = new System.Windows.Forms.GroupBox();
+            this.currentSceneLabel = new System.Windows.Forms.Label();
             this.lootDebugButton = new System.Windows.Forms.Button();
             this.enemyInfoSplitterLabel = new System.Windows.Forms.Label();
             this.enemyHealthLabel = new System.Windows.Forms.Label();
             this.enemyLabel = new System.Windows.Forms.Label();
-            this.macrosGroupBox = new System.Windows.Forms.GroupBox();
-            this.startupMacroButton = new System.Windows.Forms.Button();
-            this.startupMacroLabel = new System.Windows.Forms.Label();
-            this.prepareCombatMacroLabel = new System.Windows.Forms.Label();
-            this.prepareCombatMacroButton = new System.Windows.Forms.Button();
-            this.currentSceneLabel = new System.Windows.Forms.Label();
+            this.objectivesGroupBox = new System.Windows.Forms.GroupBox();
+            this.objectivesDataGridView = new System.Windows.Forms.DataGridView();
+            this.Index = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Objective = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Parameters = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.saveButton = new System.Windows.Forms.Button();
+            this.loadButton = new System.Windows.Forms.Button();
+            this.saveLoadGroupbox = new System.Windows.Forms.GroupBox();
             this.playerAxisDisplay = new PS4Macro.MarvelHeroesOmega.AxisDisplay();
             this.enemyHealthProgressBar = new PS4Macro.MarvelHeroesOmega.ColorProgressBar();
             this.healthProgressBar = new PS4Macro.MarvelHeroesOmega.ColorProgressBar();
             this.spiritProgressBar = new PS4Macro.MarvelHeroesOmega.ColorProgressBar();
+            this.attackSequenceButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.useMedKitNumericUpDown)).BeginInit();
             this.settingsGroupBox.SuspendLayout();
             this.debugGroupBox.SuspendLayout();
-            this.macrosGroupBox.SuspendLayout();
+            this.objectivesGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.objectivesDataGridView)).BeginInit();
+            this.saveLoadGroupbox.SuspendLayout();
             this.SuspendLayout();
             // 
             // healthLabel
@@ -71,7 +75,7 @@
             // useMedKitLabel
             // 
             this.useMedKitLabel.AutoSize = true;
-            this.useMedKitLabel.Location = new System.Drawing.Point(6, 25);
+            this.useMedKitLabel.Location = new System.Drawing.Point(6, 66);
             this.useMedKitLabel.Name = "useMedKitLabel";
             this.useMedKitLabel.Size = new System.Drawing.Size(122, 13);
             this.useMedKitLabel.TabIndex = 2;
@@ -79,7 +83,7 @@
             // 
             // useMedKitNumericUpDown
             // 
-            this.useMedKitNumericUpDown.Location = new System.Drawing.Point(128, 22);
+            this.useMedKitNumericUpDown.Location = new System.Drawing.Point(128, 63);
             this.useMedKitNumericUpDown.Name = "useMedKitNumericUpDown";
             this.useMedKitNumericUpDown.Size = new System.Drawing.Size(42, 20);
             this.useMedKitNumericUpDown.TabIndex = 3;
@@ -88,6 +92,7 @@
             0,
             0,
             0});
+            this.useMedKitNumericUpDown.ValueChanged += new System.EventHandler(this.useMedKitNumericUpDown_ValueChanged);
             // 
             // spiritLabel
             // 
@@ -100,49 +105,32 @@
             // 
             // settingsGroupBox
             // 
-            this.settingsGroupBox.Controls.Add(this.attackComboBox);
-            this.settingsGroupBox.Controls.Add(this.attackLabel);
+            this.settingsGroupBox.Controls.Add(this.attackSequenceButton);
+            this.settingsGroupBox.Controls.Add(this.saveLoadGroupbox);
             this.settingsGroupBox.Controls.Add(this.dashComboBox);
             this.settingsGroupBox.Controls.Add(this.dashLabel);
             this.settingsGroupBox.Controls.Add(this.useMedKitLabel);
             this.settingsGroupBox.Controls.Add(this.useMedKitNumericUpDown);
             this.settingsGroupBox.Location = new System.Drawing.Point(12, 66);
             this.settingsGroupBox.Name = "settingsGroupBox";
-            this.settingsGroupBox.Size = new System.Drawing.Size(349, 124);
+            this.settingsGroupBox.Size = new System.Drawing.Size(349, 89);
             this.settingsGroupBox.TabIndex = 6;
             this.settingsGroupBox.TabStop = false;
             this.settingsGroupBox.Text = "Settings";
-            // 
-            // attackComboBox
-            // 
-            this.attackComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.attackComboBox.FormattingEnabled = true;
-            this.attackComboBox.Location = new System.Drawing.Point(235, 89);
-            this.attackComboBox.Name = "attackComboBox";
-            this.attackComboBox.Size = new System.Drawing.Size(101, 21);
-            this.attackComboBox.TabIndex = 7;
-            // 
-            // attackLabel
-            // 
-            this.attackLabel.Location = new System.Drawing.Point(181, 93);
-            this.attackLabel.Name = "attackLabel";
-            this.attackLabel.Size = new System.Drawing.Size(46, 13);
-            this.attackLabel.TabIndex = 6;
-            this.attackLabel.Text = "Attack";
-            this.attackLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // dashComboBox
             // 
             this.dashComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.dashComboBox.FormattingEnabled = true;
-            this.dashComboBox.Location = new System.Drawing.Point(235, 62);
+            this.dashComboBox.Location = new System.Drawing.Point(238, 13);
             this.dashComboBox.Name = "dashComboBox";
             this.dashComboBox.Size = new System.Drawing.Size(101, 21);
             this.dashComboBox.TabIndex = 5;
+            this.dashComboBox.SelectedIndexChanged += new System.EventHandler(this.dashComboBox_SelectedIndexChanged);
             // 
             // dashLabel
             // 
-            this.dashLabel.Location = new System.Drawing.Point(181, 66);
+            this.dashLabel.Location = new System.Drawing.Point(184, 17);
             this.dashLabel.Name = "dashLabel";
             this.dashLabel.Size = new System.Drawing.Size(46, 13);
             this.dashLabel.TabIndex = 4;
@@ -158,12 +146,21 @@
             this.debugGroupBox.Controls.Add(this.enemyHealthLabel);
             this.debugGroupBox.Controls.Add(this.enemyLabel);
             this.debugGroupBox.Controls.Add(this.enemyHealthProgressBar);
-            this.debugGroupBox.Location = new System.Drawing.Point(12, 290);
+            this.debugGroupBox.Location = new System.Drawing.Point(12, 340);
             this.debugGroupBox.Name = "debugGroupBox";
             this.debugGroupBox.Size = new System.Drawing.Size(349, 87);
             this.debugGroupBox.TabIndex = 7;
             this.debugGroupBox.TabStop = false;
             this.debugGroupBox.Text = "Debug";
+            // 
+            // currentSceneLabel
+            // 
+            this.currentSceneLabel.AutoSize = true;
+            this.currentSceneLabel.Location = new System.Drawing.Point(59, 58);
+            this.currentSceneLabel.Name = "currentSceneLabel";
+            this.currentSceneLabel.Size = new System.Drawing.Size(47, 13);
+            this.currentSceneLabel.TabIndex = 6;
+            this.currentSceneLabel.Text = "Scene: -";
             // 
             // lootDebugButton
             // 
@@ -201,67 +198,84 @@
             this.enemyLabel.TabIndex = 1;
             this.enemyLabel.Text = "ENEMY";
             // 
-            // macrosGroupBox
+            // objectivesGroupBox
             // 
-            this.macrosGroupBox.Controls.Add(this.prepareCombatMacroButton);
-            this.macrosGroupBox.Controls.Add(this.prepareCombatMacroLabel);
-            this.macrosGroupBox.Controls.Add(this.startupMacroButton);
-            this.macrosGroupBox.Controls.Add(this.startupMacroLabel);
-            this.macrosGroupBox.Location = new System.Drawing.Point(12, 196);
-            this.macrosGroupBox.Name = "macrosGroupBox";
-            this.macrosGroupBox.Size = new System.Drawing.Size(349, 88);
-            this.macrosGroupBox.TabIndex = 8;
-            this.macrosGroupBox.TabStop = false;
-            this.macrosGroupBox.Text = "Macros";
+            this.objectivesGroupBox.Controls.Add(this.objectivesDataGridView);
+            this.objectivesGroupBox.Location = new System.Drawing.Point(12, 161);
+            this.objectivesGroupBox.Name = "objectivesGroupBox";
+            this.objectivesGroupBox.Size = new System.Drawing.Size(349, 173);
+            this.objectivesGroupBox.TabIndex = 8;
+            this.objectivesGroupBox.TabStop = false;
+            this.objectivesGroupBox.Text = "Objectives";
             // 
-            // startupMacroButton
+            // objectivesDataGridView
             // 
-            this.startupMacroButton.Location = new System.Drawing.Point(53, 20);
-            this.startupMacroButton.Name = "startupMacroButton";
-            this.startupMacroButton.Size = new System.Drawing.Size(63, 23);
-            this.startupMacroButton.TabIndex = 1;
-            this.startupMacroButton.Tag = "Startup";
-            this.startupMacroButton.Text = "NOT SET";
-            this.startupMacroButton.UseVisualStyleBackColor = true;
-            this.startupMacroButton.Click += new System.EventHandler(this.macroButton_Click);
+            this.objectivesDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.objectivesDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Index,
+            this.Objective,
+            this.Parameters});
+            this.objectivesDataGridView.Location = new System.Drawing.Point(9, 20);
+            this.objectivesDataGridView.Name = "objectivesDataGridView";
+            this.objectivesDataGridView.Size = new System.Drawing.Size(327, 147);
+            this.objectivesDataGridView.TabIndex = 0;
+            this.objectivesDataGridView.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.objectivesDataGridView_CellFormatting);
             // 
-            // startupMacroLabel
+            // Index
             // 
-            this.startupMacroLabel.AutoSize = true;
-            this.startupMacroLabel.Location = new System.Drawing.Point(6, 25);
-            this.startupMacroLabel.Name = "startupMacroLabel";
-            this.startupMacroLabel.Size = new System.Drawing.Size(41, 13);
-            this.startupMacroLabel.TabIndex = 0;
-            this.startupMacroLabel.Text = "Startup";
+            this.Index.FillWeight = 40F;
+            this.Index.HeaderText = "#";
+            this.Index.Name = "Index";
+            this.Index.ReadOnly = true;
+            this.Index.Width = 40;
             // 
-            // prepareCombatMacroLabel
+            // Objective
             // 
-            this.prepareCombatMacroLabel.AutoSize = true;
-            this.prepareCombatMacroLabel.Location = new System.Drawing.Point(6, 56);
-            this.prepareCombatMacroLabel.Name = "prepareCombatMacroLabel";
-            this.prepareCombatMacroLabel.Size = new System.Drawing.Size(83, 13);
-            this.prepareCombatMacroLabel.TabIndex = 2;
-            this.prepareCombatMacroLabel.Text = "Prepare Combat";
+            this.Objective.DataPropertyName = "Objective";
+            this.Objective.HeaderText = "Objective";
+            this.Objective.Items.AddRange(new object[] {
+            "PlayMacro",
+            "FightWave",
+            "GoToIndex",
+            "Wait"});
+            this.Objective.Name = "Objective";
             // 
-            // prepareCombatMacroButton
+            // Parameters
             // 
-            this.prepareCombatMacroButton.Location = new System.Drawing.Point(95, 51);
-            this.prepareCombatMacroButton.Name = "prepareCombatMacroButton";
-            this.prepareCombatMacroButton.Size = new System.Drawing.Size(63, 23);
-            this.prepareCombatMacroButton.TabIndex = 3;
-            this.prepareCombatMacroButton.Tag = "PrepareCombat";
-            this.prepareCombatMacroButton.Text = "NOT SET";
-            this.prepareCombatMacroButton.UseVisualStyleBackColor = true;
-            this.prepareCombatMacroButton.Click += new System.EventHandler(this.macroButton_Click);
+            this.Parameters.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Parameters.DataPropertyName = "Parameters";
+            this.Parameters.HeaderText = "Parameters";
+            this.Parameters.Name = "Parameters";
             // 
-            // currentSceneLabel
+            // saveButton
             // 
-            this.currentSceneLabel.AutoSize = true;
-            this.currentSceneLabel.Location = new System.Drawing.Point(59, 58);
-            this.currentSceneLabel.Name = "currentSceneLabel";
-            this.currentSceneLabel.Size = new System.Drawing.Size(47, 13);
-            this.currentSceneLabel.TabIndex = 6;
-            this.currentSceneLabel.Text = "Scene: -";
+            this.saveButton.Location = new System.Drawing.Point(6, 11);
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(53, 23);
+            this.saveButton.TabIndex = 8;
+            this.saveButton.Text = "Save";
+            this.saveButton.UseVisualStyleBackColor = true;
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
+            // 
+            // loadButton
+            // 
+            this.loadButton.Location = new System.Drawing.Point(70, 11);
+            this.loadButton.Name = "loadButton";
+            this.loadButton.Size = new System.Drawing.Size(53, 23);
+            this.loadButton.TabIndex = 9;
+            this.loadButton.Text = "Load";
+            this.loadButton.UseVisualStyleBackColor = true;
+            this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
+            // 
+            // saveLoadGroupbox
+            // 
+            this.saveLoadGroupbox.Controls.Add(this.saveButton);
+            this.saveLoadGroupbox.Controls.Add(this.loadButton);
+            this.saveLoadGroupbox.Location = new System.Drawing.Point(9, 13);
+            this.saveLoadGroupbox.Name = "saveLoadGroupbox";
+            this.saveLoadGroupbox.Size = new System.Drawing.Size(128, 40);
+            this.saveLoadGroupbox.TabIndex = 10;
+            this.saveLoadGroupbox.TabStop = false;
             // 
             // playerAxisDisplay
             // 
@@ -298,12 +312,22 @@
             this.spiritProgressBar.Size = new System.Drawing.Size(270, 23);
             this.spiritProgressBar.TabIndex = 5;
             // 
+            // attackSequenceButton
+            // 
+            this.attackSequenceButton.Location = new System.Drawing.Point(238, 40);
+            this.attackSequenceButton.Name = "attackSequenceButton";
+            this.attackSequenceButton.Size = new System.Drawing.Size(101, 23);
+            this.attackSequenceButton.TabIndex = 11;
+            this.attackSequenceButton.Text = "Attack Sequence";
+            this.attackSequenceButton.UseVisualStyleBackColor = true;
+            this.attackSequenceButton.Click += new System.EventHandler(this.attackSequenceButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(373, 389);
-            this.Controls.Add(this.macrosGroupBox);
+            this.ClientSize = new System.Drawing.Size(373, 439);
+            this.Controls.Add(this.objectivesGroupBox);
             this.Controls.Add(this.debugGroupBox);
             this.Controls.Add(this.settingsGroupBox);
             this.Controls.Add(this.healthProgressBar);
@@ -320,8 +344,9 @@
             this.settingsGroupBox.PerformLayout();
             this.debugGroupBox.ResumeLayout(false);
             this.debugGroupBox.PerformLayout();
-            this.macrosGroupBox.ResumeLayout(false);
-            this.macrosGroupBox.PerformLayout();
+            this.objectivesGroupBox.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.objectivesDataGridView)).EndInit();
+            this.saveLoadGroupbox.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -342,16 +367,18 @@
         private System.Windows.Forms.Label enemyHealthLabel;
         private System.Windows.Forms.Label enemyInfoSplitterLabel;
         private AxisDisplay playerAxisDisplay;
-        private System.Windows.Forms.ComboBox attackComboBox;
-        private System.Windows.Forms.Label attackLabel;
         private System.Windows.Forms.ComboBox dashComboBox;
         private System.Windows.Forms.Label dashLabel;
         private System.Windows.Forms.Button lootDebugButton;
-        private System.Windows.Forms.GroupBox macrosGroupBox;
-        private System.Windows.Forms.Button startupMacroButton;
-        private System.Windows.Forms.Label startupMacroLabel;
-        private System.Windows.Forms.Button prepareCombatMacroButton;
-        private System.Windows.Forms.Label prepareCombatMacroLabel;
+        private System.Windows.Forms.GroupBox objectivesGroupBox;
         private System.Windows.Forms.Label currentSceneLabel;
+        private System.Windows.Forms.DataGridView objectivesDataGridView;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Index;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Objective;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Parameters;
+        private System.Windows.Forms.GroupBox saveLoadGroupbox;
+        private System.Windows.Forms.Button saveButton;
+        private System.Windows.Forms.Button loadButton;
+        private System.Windows.Forms.Button attackSequenceButton;
     }
 }

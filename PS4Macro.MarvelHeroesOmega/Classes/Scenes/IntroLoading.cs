@@ -46,9 +46,6 @@ namespace PS4Macro.MarvelHeroesOmega.Scenes
 
             // Wait 5 seconds
             script.Sleep(5000);
-
-            // Play Startup macro if exist
-            ((Script)script).PlayMacroByKey(MacroManager.KEY_PREPARE_COMBAT);
         }
     }
 }

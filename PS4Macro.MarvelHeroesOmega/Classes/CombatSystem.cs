@@ -233,6 +233,9 @@ namespace PS4Macro.MarvelHeroesOmega
             // Found enemy
             if (enemy != null)
             {
+                // Store flag in objective manager
+                ObjectiveManager.Instance.FoundEnemy = true;
+
                 //Debug.WriteLine("ENEMY HEALTH: {0}", enemy.Health);
 
                 // Store info
@@ -263,8 +266,11 @@ namespace PS4Macro.MarvelHeroesOmega
                 }
 
                 // Attack
-                var attackControl = script.MainForm.GetAttackControl();
-                script.PressQueue(attackControl.State, attackControl.Properties);
+                var attackControl = AttackSequenceManager.Instance.GetNextState();
+                if (attackControl != null)
+                {
+                    script.PressQueue(attackControl.State, attackControl.Properties);
+                }
 
                 // Check enemy health for progress
                 var enemyHealthLimit = 15;
@@ -307,10 +313,23 @@ namespace PS4Macro.MarvelHeroesOmega
                 // Reset
                 ResetEnemyData();
 
-                // Roam the map
-                if (script.WalkDirection != -1)
+                // Trigger objective when no more enemy
+                if (ObjectiveManager.Instance.FoundEnemy)
                 {
-                    RoamMap(script);
+                    script.EnableLoop = false;
+                    ObjectiveManager.Instance.FoundEnemy = false;
+                    ObjectiveManager.Instance.ShouldUpdate = true;
+
+                    // Reset attack sequence
+                    AttackSequenceManager.Instance.Reset();
+                }
+                else
+                {
+                    // Roam the map
+                    if (script.WalkDirection != -1)
+                    {
+                        RoamMap(script);
+                    }
                 }
             }
         }

@@ -45,6 +45,7 @@ namespace PS4Macro.MarvelHeroesOmega
         public double WalkDirection { get; private set; }
         public double WalkDistance { get; private set; }
 
+        public bool EnableLoop { get; set; }
         public bool MacroHasPriority { get; set; }
 
         /* Constructor */
@@ -84,12 +85,16 @@ namespace PS4Macro.MarvelHeroesOmega
             m_PlayerMovement = new PlayerMovement();
             m_CombatSystem = new CombatSystem();
             m_LootSystem = new LootSystem();
+
+            // Reset singletons
+            AttackSequenceManager.Instance.Reset();
+            ObjectiveManager.Instance.Reset();
         }
 
         // Called every interval set by LoopDelay
         public override void Update()
         {
-            // Macro only
+            // Ignore the rest when macro has priority
             if (MacroHasPriority)
                 return;
 
@@ -113,40 +118,49 @@ namespace PS4Macro.MarvelHeroesOmega
             // Reset scene name in UI
             MainForm.SetCurrentScene(null);
 
-            // Capture screenshot
-            CaptureFrame();
+            // Main loop
+            if (EnableLoop)
+            {
+                // Capture screenshot
+                CaptureFrame();
 
-            // Release buttons
-            ReleaseQueue();
+                // Release buttons
+                ReleaseQueue();
 
-            // Detect health
-            HealthPercent = m_PlayerStatus.DetectHealth(this);
-            MainForm.SetHealth(HealthPercent);
+                // Detect health
+                HealthPercent = m_PlayerStatus.DetectHealth(this);
+                MainForm.SetHealth(HealthPercent);
 
-            // Detect spirit
-            SpiritPercent = m_PlayerStatus.DetectSpirit(this);
-            MainForm.SetSpirit(SpiritPercent);
+                // Detect spirit
+                SpiritPercent = m_PlayerStatus.DetectSpirit(this);
+                MainForm.SetSpirit(SpiritPercent);
 
-            // Detect rotation
-            PlayerRotation = m_PlayerMovement.DetectRotation(this);
+                // Detect rotation
+                PlayerRotation = m_PlayerMovement.DetectRotation(this);
 
-            // Walk direction
-            var walkInfo = m_PlayerMovement.FindWalkDirection(this);
-            WalkDirection = walkInfo.Key;
-            WalkDistance = walkInfo.Value;
+                // Walk direction
+                var walkInfo = m_PlayerMovement.FindWalkDirection(this);
+                WalkDirection = walkInfo.Key;
+                WalkDistance = walkInfo.Value;
 
-            // TODO: Need refactoring and check
-            //System.Diagnostics.Debug.WriteLine(" - - DIRECTION: {0}, Point: {1}", WalkDirection, Helper.DegreesToPoint(1.0f, WalkDirection));
-            var playerAxis = Helper.DegreesToPoint(1.0f, WalkDirection - 90);
-            playerAxis.Y *= -1;
-            MainForm.SetPlayerAxis(playerAxis);
+                // TODO: Need refactoring and check
+                //System.Diagnostics.Debug.WriteLine(" - - DIRECTION: {0}, Point: {1}", WalkDirection, Helper.DegreesToPoint(1.0f, WalkDirection));
+                var playerAxis = Helper.DegreesToPoint(1.0f, WalkDirection - 90);
+                playerAxis.Y *= -1;
+                MainForm.SetPlayerAxis(playerAxis);
 
-            // Detect loots
-            var eternitySplinters = m_LootSystem.DetectEternitySplinters(this);
-            System.Diagnostics.Debug.WriteLine("ETERNITY SPLINTER: {0} - ", eternitySplinters.Length);
+                // Detect loots
+                //var eternitySplinters = m_LootSystem.DetectEternitySplinters(this);
+                //System.Diagnostics.Debug.WriteLine("ETERNITY SPLINTER: {0} - ", eternitySplinters.Length);
 
-            // Combat system
-            m_CombatSystem.Update(this);
+                // Combat system
+                m_CombatSystem.Update(this);
+            }
+            else
+            {
+                // Update objective
+                ObjectiveManager.Instance.Update(this);
+            }
         }
 
         public override void OnStopped()
@@ -163,16 +177,19 @@ namespace PS4Macro.MarvelHeroesOmega
         {
             StopMacro();
             MacroHasPriority = false;
+
+            // Trigger objective
+            ObjectiveManager.Instance.ShouldUpdate = true;
         }
 
         /* --- */
 
-        public void PlayMacroByKey(string key)
+        public void PlayMacroByPath(string path)
         {
             try
             {
-                if (!MacroManager.Instance.Exist(key)) return;
-                PlayMacro(MacroManager.Instance.PathDictionary[key]);
+                if (!System.IO.File.Exists(path)) return;
+                PlayMacro(path);
                 MacroHasPriority = true;
             }
             catch (Exception)

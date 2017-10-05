@@ -27,13 +27,20 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace PS4Macro.MarvelHeroesOmega
 {
     public class Helper
     {
+        public static string GetScriptFolder()
+        {
+            return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        }
+
         public static Bitmap PosterizeFilter(Bitmap bmp, byte posterizationInterval = 150)
         {
             SimplePosterization filter = new SimplePosterization();

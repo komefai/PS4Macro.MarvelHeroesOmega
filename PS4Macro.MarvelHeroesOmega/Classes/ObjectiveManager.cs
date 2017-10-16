@@ -56,6 +56,8 @@ namespace PS4Macro.MarvelHeroesOmega
         public bool ShouldUpdate { get; set; }
 
         public bool FoundEnemy { get; set; }
+        public DateTime FightWaveStartTime { get; set; }
+        public int FightWaveRecoveryIndex { get; set; }
 
         private ObjectiveManager()
         {
@@ -73,6 +75,18 @@ namespace PS4Macro.MarvelHeroesOmega
             CurrentIndex = -1;
             ShouldUpdate = true;
             FoundEnemy = false;
+        }
+
+        public void GoToIndex(int index)
+        {
+            CurrentIndex = index;
+            ShouldUpdate = true;
+        }
+
+        public void GoToFightRecoveryIndex()
+        {
+            GoToIndex(FightWaveRecoveryIndex);
+            FightWaveRecoveryIndex = -1;
         }
 
         public void Update(Script script)
@@ -114,14 +128,23 @@ namespace PS4Macro.MarvelHeroesOmega
 
                 case KEY_FIGHT_WAVE:
                 {
+                    FightWaveStartTime = DateTime.Now;
+                    FightWaveRecoveryIndex = -1;
+
+                    int parseVal = -1;
+                    if (int.TryParse(objective.Parameters, out parseVal))
+                            FightWaveRecoveryIndex = parseVal - 2;
+
                     script.EnableLoop = true;
                     break;
                 }
 
                 case KEY_GOTO_INDEX:
                 {
-                    CurrentIndex = int.Parse(objective.Parameters) - 2;
-                    ShouldUpdate = true;
+                    int parseVal = -1;
+                    if (int.TryParse(objective.Parameters, out parseVal))
+                        GoToIndex(parseVal - 2);
+
                     break;
                 }
 

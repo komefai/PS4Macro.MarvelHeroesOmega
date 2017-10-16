@@ -256,13 +256,18 @@ namespace PS4Macro.MarvelHeroesOmega
                 if (!TargetLocked)
                 {
                     // Lock target
-                    script.PressQueue(new DualShockState() { R1 = true }, "R1");
+                    //script.PressQueue(new DualShockState() { R1 = true }, "R1");
+                    script.Press(new DualShockState() { R1 = true });
                     TargetLocked = true;
                     LastTargetLockedTime = DateTime.Now;
 
                     // Dash once to get closer
                     var dashControl = script.MainForm.GetDashControl();
-                    script.PressQueue(dashControl.State, dashControl.Properties);
+                    //script.PressQueue(dashControl.State, dashControl.Properties);
+                    script.Press(dashControl.State);
+
+                    // Target lock takes priority, attack later
+                    return;
                 }
 
                 // Attack
@@ -273,7 +278,7 @@ namespace PS4Macro.MarvelHeroesOmega
                 }
 
                 // Check enemy health for progress
-                var enemyHealthLimit = 15;
+                var enemyHealthLimit = 80; // ~80 seconds
                 if (EnemyHealthHistory.Count >= enemyHealthLimit)
                 {
                     // Search through history
@@ -310,11 +315,20 @@ namespace PS4Macro.MarvelHeroesOmega
             // Enemy not found
             else
             {
+                // Continue only if the last seen enemy is not found for a while
+                if ((DateTime.Now - LastFoundEnemyTime).TotalMilliseconds < 1500)
+                    return;
+
                 // Reset
                 ResetEnemyData();
 
+                // Fight wave recovery
+                bool enableFightRecovery = ObjectiveManager.Instance.FightWaveRecoveryIndex != -1;
+                bool fightRecoveryTimeout = (DateTime.Now - ObjectiveManager.Instance.FightWaveStartTime).TotalMilliseconds >= 60000; // ~1 minute
+                bool shouldRecoverFight = enableFightRecovery && fightRecoveryTimeout;
+
                 // Trigger objective when no more enemy
-                if (ObjectiveManager.Instance.FoundEnemy)
+                if (ObjectiveManager.Instance.FoundEnemy || shouldRecoverFight)
                 {
                     script.EnableLoop = false;
                     ObjectiveManager.Instance.FoundEnemy = false;
@@ -322,11 +336,18 @@ namespace PS4Macro.MarvelHeroesOmega
 
                     // Reset attack sequence
                     AttackSequenceManager.Instance.Reset();
+
+                    // Go to recovery index if enabled
+                    if (shouldRecoverFight)
+                    {
+                        ObjectiveManager.Instance.GoToFightRecoveryIndex();
+                    }
                 }
+                // Enemy not found yet
                 else
                 {
                     // Roam the map
-                    if (script.WalkDirection != -1)
+                    if ((int)script.WalkDirection != -1)
                     {
                         RoamMap(script);
                     }

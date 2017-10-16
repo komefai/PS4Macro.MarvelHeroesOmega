@@ -13,17 +13,17 @@ Bot script for MarvelHeroesOmega using [PS4 Macro](https://github.com/komefai/PS
 - Auto heal at a certain %
 - Walk around map (experimental)
 - Lock target and attack when an enemy is detected
+- Program the bot using Objectives
+- Customize attack controls in Attack Sequence
 
 ## Usage
 
 1. Open PS4Macro.MarvelHeroesOmega.dll in PS4 Macro.
-2. Press the `Script` button
-3. Press play
+2. Press play
 
 ## To-Do List
 
 - Smarter movement
-- More attack combinations
 - Collect loots
 - Selling
 

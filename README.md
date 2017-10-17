@@ -6,6 +6,10 @@ Bot script for MarvelHeroesOmega using [PS4 Macro](https://github.com/komefai/PS
 
 ![Screenshot](https://raw.githubusercontent.com/komefai/PS4Macro.MarvelHeroesOmega/master/_resources/Screenshot.png)
 
+#### Demo Video
+
+[![Demo Video](https://img.youtube.com/vi/PoGtDRzVKyk/0.jpg)](https://www.youtube.com/watch?v=PoGtDRzVKyk)
+
 ## Features
 
 - Display health
